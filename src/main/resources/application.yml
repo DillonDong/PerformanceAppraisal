@@ -1,0 +1,83 @@
+#debug: false
+#logging:
+#  level:
+#    cn.edu.fjnu.towide: debug
+logging:
+  config: classpath:logback-boot.xml
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://193.112.109.253:3306/project?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    username: project
+    password: T7yHyxMZDXfZ2kFc
+
+
+#    url: jdbc:mysql://47.106.139.233:3306/yzb?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+
+
+#    url: jdbc:mysql://127.0.0.1:3306/yzb?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+
+#        username: root
+#        password: 123456
+#    url: jdbc:mysql://www.towide.cn:3306/fjnu_admissions_office?allowMultiQueries=true
+#    username: fjnuadmissionsoffice
+#    password: byqj301
+#    initialize: true
+#    init-db: true
+
+
+
+#  redis:
+#   database: 0
+#    host: www.towide.cn
+#    port: 6379
+#    password: 
+#    pool:
+#      max-active: 8
+#      max-wait: -1
+#      max-idle: 8
+#      min-idle: 0
+#    timeout: 0
+
+
+
+pagehelper:
+  helper-dialect: mysql
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+server:
+
+  port: 8082
+#  port: 446
+#  ssl:
+#   key-store: classpath:tomcat.keystore
+#   key-password: 123456
+
+email:
+  # 用户名
+  user: wangsheng@www.mneeds.top
+  # 密码
+  password: WangSheng007
+  # 标题
+  title: 无
+
+mns:
+  AccessKeyId: LTAIJgssDCmpYD0S
+  AccessKeySecret: Gn6BBYm61W8WsRweOetBSgpWhyEJFW
+  accountEndpoint: https://1370495773192752.mns.cn-hangzhou.aliyuncs.com/
+  queueName: event-queue
+
+wechat:
+  app_id: wx7d31de917ccce130
+  app_secret: 9ace2f230bfc8a258e8338dad8d50277
+  get_session_key_api: https://api.weixin.qq.com/sns/jscode2session
+
+
+kdniao:
+  ebusinessid: 1366398
+  appkey: 86572449-a0a3-4b47-b7b7-5f2952709974
+  requrl: http://api.kdniao.cc/Ebusiness/EbusinessOrderHandle.aspx
+
