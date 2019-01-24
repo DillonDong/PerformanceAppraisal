@@ -2,14 +2,13 @@ package cn.edu.fjnu.towide.dao;
 
 import java.util.List;
 
+import cn.edu.fjnu.towide.entity.Group;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
-
-import cn.edu.fjnu.towide.entity.Group;
 
 @Repository
 public interface GroupDao {

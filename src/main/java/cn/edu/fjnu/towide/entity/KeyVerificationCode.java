@@ -7,10 +7,10 @@ import java.util.Date;
 
 @Data
 public class KeyVerificationCode {
-    private String keyWord;
+  private String keyWord;
 
-    private String verificationCode;
+  private String verificationCode;
 
-    private Date generateTime;
+  private Date generateTime;
 
 }

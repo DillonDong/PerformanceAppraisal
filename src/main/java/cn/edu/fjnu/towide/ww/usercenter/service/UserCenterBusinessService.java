@@ -248,10 +248,7 @@ public class UserCenterBusinessService {
         //将注册的用户信息写到数据库中
         UserDetails userDetails = new UserDetails();
         userDetails.setUsername(userInfoVo.getUsername());
-        userDetails.setNickname(userInfoVo.getNickname());
-        userDetails.setHead(userInfoVo.getHead());
-        userDetails.setProvince(userInfoVo.getProvince());
-        userDetails.setCity(userInfoVo.getCity());
+
 
         userDetails.setCreateTime(new Date());
         userDetails.setUpdateTime(new Date());

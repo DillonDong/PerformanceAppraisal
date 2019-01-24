@@ -9,27 +9,27 @@ import lombok.Data;
 @Data
 public class OperationLog {
 
-    private String username;
+  private String username;
 
-    private String ip;
+  private String ip;
 
-    private String examinee;
+  private String examinee;
 
-    private String operationContent;
+  private String operationContent;
 
-    @JsonIgnore
-    private Date operationDateTime;
+  @JsonIgnore
+  private Date operationDateTime;
 
-	private String operationDateTimeString;
+  private String operationDateTimeString;
 
-    private String operationResult;
+  private String operationResult;
 
-    private String reason;
+  private String reason;
 
-    
-    public String getOperationDateTimeString() {
-    	return DateTimeUtil.getDateTimeString(getOperationDateTime());
-	}
+
+  public String getOperationDateTimeString() {
+    return DateTimeUtil.getDateTimeString(getOperationDateTime());
+  }
 
 
 
