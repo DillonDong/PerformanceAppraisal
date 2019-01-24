@@ -10,10 +10,10 @@ import javax.servlet.MultipartConfigElement;
 
 @SpringBootApplication
 @MapperScan("cn.edu.fjnu.towide.dao")
-public class EnjoyMeal {
+public class PerformanceAppraisal {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EnjoyMeal.class, args);
+		SpringApplication.run(PerformanceAppraisal.class, args);
     }
 	
 	/**
