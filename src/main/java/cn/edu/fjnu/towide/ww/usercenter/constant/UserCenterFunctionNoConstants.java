@@ -11,6 +11,6 @@ public interface UserCenterFunctionNoConstants {
 	String SET_PASSWORD = "SetPassword";//设置密码
 
 	String Get_USER_REGISTRATION = "GetUserRegistration";//用户注册
-	String FORGET_PASSWORD = "ForgetPassword";//忘记密码
+	String FORGET_PASSWORD = "UpdatePassword";//更改密码
 
 }

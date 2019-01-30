@@ -58,8 +58,7 @@ public interface UserDao {
 
 
 
-	@Insert("INSERT INTO tb_bmxx (bmh) VALUES (#{username})")
-	boolean addUserTobmxx(String username);
+
 
 
 	/**
@@ -72,8 +71,8 @@ public interface UserDao {
 	/**
 	 *  前台添加用户信息user_details   如果已存在则更新
 	 */
-	@Insert("REPLACE INTO user_details(username,nickname,head,province,city) "
-			+"VALUES (#{username},#{nickname},#{head},#{province},#{city})")
+	@Insert("REPLACE INTO user_details(username,real_name,remarks,code,create_time,update_time) "
+			+"VALUES (#{username},#{realName},#{remarks},#{code},#{createTime},#{updateTime})")
 	boolean addUserDetails(UserDetails userDetails);
 
 	@Update("UPDATE user_details SET update_time=#{update_time} WHERE username=#{username}")

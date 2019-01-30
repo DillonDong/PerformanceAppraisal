@@ -8,9 +8,9 @@ logging:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://193.112.109.253:3306/project?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-    username: project
-    password: T7yHyxMZDXfZ2kFc
+    url: jdbc:mysql://193.112.109.253:3306/p_a?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    username: p_a
+    password: kwBcph3DHNhkZ5cf
 
 
 #    url: jdbc:mysql://47.106.139.233:3306/yzb?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8

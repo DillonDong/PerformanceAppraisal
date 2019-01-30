@@ -1,6 +1,8 @@
 package cn.edu.fjnu.towide.entity;
 
+import lombok.Data;
 
+@Data
 public class AssessmentItem {
 
   private String id;

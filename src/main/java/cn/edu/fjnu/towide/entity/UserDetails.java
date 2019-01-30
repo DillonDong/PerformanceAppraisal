@@ -38,7 +38,8 @@ public class UserDetails {
     private String deptId;  //部门
     private double baseSalary; //底薪
     private String code;//编号
-    private String idCard;//身份证
+    private String idPre;//身份证正面
+    private String idAfter;//身份证背面
 
     private Integer enabled;
     private Set<Authority> authorities;
