@@ -59,8 +59,12 @@ public class DeptManagementBusinessService {
         }
         List<AssessmentItemVo> assessmentItems = dataCenterService.getData("assessmentItems");
         String deptId = department.getId();
-        departmentDao.DeleteAssessmentItemByDepartmentId(deptId);
 
+        if (assessmentItems.size()==0){
+            setReturnDataOfSuccess();
+            return;
+        }
+        departmentDao.DeleteAssessmentItemByDepartmentId(deptId);
         Boolean res2 = departmentDao.InsertAssessmentItems(assessmentItems, deptId);
         if (!res2) {
             ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.INSERT_IS_FAILURE);
@@ -90,7 +94,9 @@ public class DeptManagementBusinessService {
 
         List<AssessmentItemWithWeightVo> assessmentItems = departmentDao.GetAssessmentItemsByDepartmentId(deptId);
 
+        Department department = departmentDao.GetDepartmentByDepartmentId(deptId);
         JSONObject jsonObject = new JSONObject();
+        jsonObject.put("department",department);
         jsonObject.put("assessmentItems",assessmentItems);
         setReturnDataOfSuccess(jsonObject);
 

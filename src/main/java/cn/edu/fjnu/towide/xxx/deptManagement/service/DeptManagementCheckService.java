@@ -43,6 +43,7 @@ public class DeptManagementCheckService {
         }
         List<AssessmentItemVo> assessmentItems = jsonArray.toJavaList(AssessmentItemVo.class);
 
+
         assessmentItems.stream().forEach(
                 assessmentItemVo -> {
                     if (assessmentItemVo.getWeight()==null||assessmentItemVo.getWeight()<=0){

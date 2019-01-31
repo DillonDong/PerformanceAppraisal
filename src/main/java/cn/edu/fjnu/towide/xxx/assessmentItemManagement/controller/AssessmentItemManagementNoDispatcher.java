@@ -24,6 +24,9 @@ public class AssessmentItemManagementNoDispatcher {
             case AssessmentItemManagementFunctionNoConstants.DELETE_ASSESSMENT_ITEM_BY_ASID:
                 assessmentItemManagementService.deleteAssessmentItemByAsIdRequest();
                 break;
+            case AssessmentItemManagementFunctionNoConstants.GET_ASSESSMENT_ITEM_WITH_COUNT_BY_ASID:
+                assessmentItemManagementService.getAssessmentItemWithCountByAsIdRequest();
+                break;
             default:
                 ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.FUNCTION_NO_ARE_INCORRECT);
                 break;

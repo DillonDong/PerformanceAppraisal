@@ -6,6 +6,7 @@ import cn.edu.fjnu.towide.entity.ResponseData;
 import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.*;
 import cn.edu.fjnu.towide.xxx.assessmentItemManagement.enums.ReasonOfFailure;
+import cn.edu.fjnu.towide.xxx.assessmentItemManagement.vo.CountVo;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AssessmentItemManagementBusinessService {
@@ -46,13 +49,24 @@ public class AssessmentItemManagementBusinessService {
     @Transactional
     public void addAssessmentItemRequestProcess() {
         AssessmentItem assessmentItem = dataCenterService.getData("assessmentItem");
+        List<CountVo> count = dataCenterService.getData("count");
 
         boolean res = assessmentItemDao.AddAssessmentItem(assessmentItem);
         ResponseData responseData = dataCenterService.getResponseDataFromDataLocal();
         if (!res){
             ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.INSERT_IS_FAILURE);
+            return;
+        }
+
+        assessmentItemDao.DeleteCountByAsId(assessmentItem.getId());
+
+        Boolean res2 = assessmentItemDao.InsertAssessmentItemCount(count,assessmentItem.getId());
+        if (!res2) {
+            ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.INSERT_IS_FAILURE);
+            return;
         }
         setReturnDataOfSuccess();
+
 
 
     }
@@ -77,7 +91,22 @@ public class AssessmentItemManagementBusinessService {
         Boolean res = assessmentItemDao.DeleteAssessmentItemByAsId(asId);
         if (!res){
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.DELETE_IS_FAILURE);
+            return;
         }
         setReturnDataOfSuccess();
+    }
+
+    public void getAssessmentItemWithCountByAsIdRequestProcess() {
+        String asId = dataCenterService.getData("asId");
+
+        List<CountVo> count = assessmentItemDao.GetAssessmentItemLevelAndCountByAsId(asId);
+        AssessmentItem assessmentItem = assessmentItemDao.GetAssessmentItemByAsId(asId);
+
+        count= count.stream().sorted(Comparator.comparing(CountVo::getLevel).reversed()).collect(Collectors.toList());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("count",count);
+        jsonObject.put("assessmentItem",assessmentItem);
+        setReturnDataOfSuccess(jsonObject);
+
     }
 }
