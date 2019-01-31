@@ -21,9 +21,6 @@ public class DeptManagementNoDispatcher {
             case  DeptManagementFunctionNoConstants.GET_DEPARTMENT_LIST:
                 deptManagementService.getDepartmentListRequest();
                 break;
-            case  DeptManagementFunctionNoConstants.ADD_ASSESSMENT_ITEM_FOR_DEPARTMENT:
-                deptManagementService.addAssessmentItemForDepartmentRequest();
-                break;
             case DeptManagementFunctionNoConstants.GET_ASSESSMENT_ITEMS_BY_DEPARTMENT_ID:
                 deptManagementService.getAssessmentItemsByDepartmentIdRequest();
                 break;

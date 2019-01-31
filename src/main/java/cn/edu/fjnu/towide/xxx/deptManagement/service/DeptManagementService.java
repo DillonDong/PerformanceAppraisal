@@ -24,10 +24,7 @@ public class DeptManagementService {
 		deptManagementBusinessService.getDepartmentListRequestProcess();
 	}
 
-    public void addAssessmentItemForDepartmentRequest() {
-		deptManagementCheckService.addAssessmentItemForDepartmentRequestCheck();
-		deptManagementBusinessService.addAssessmentItemForDepartmentRequestProcess();
-    }
+
 
 	public void getAssessmentItemsByDepartmentIdRequest() {
 		deptManagementCheckService.getAssessmentItemsByDepartmentIdRequestCheck();

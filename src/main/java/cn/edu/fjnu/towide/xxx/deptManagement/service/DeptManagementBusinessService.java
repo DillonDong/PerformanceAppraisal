@@ -1,7 +1,6 @@
 package cn.edu.fjnu.towide.xxx.deptManagement.service;
 
 import cn.edu.fjnu.towide.dao.DepartmentDao;
-import cn.edu.fjnu.towide.entity.AssessmentItem;
 import cn.edu.fjnu.towide.entity.Department;
 import cn.edu.fjnu.towide.entity.ResponseData;
 import cn.edu.fjnu.towide.service.DataCenterService;
@@ -11,7 +10,6 @@ import cn.edu.fjnu.towide.xxx.deptManagement.enums.ReasonOfFailure;
 import cn.edu.fjnu.towide.xxx.deptManagement.vo.AssessmentItemVo;
 import cn.edu.fjnu.towide.xxx.deptManagement.vo.AssessmentItemWithWeightVo;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 
+@SuppressWarnings("all")
 @Service
 public class DeptManagementBusinessService {
     @Autowired
@@ -58,6 +57,15 @@ public class DeptManagementBusinessService {
             ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.INSERT_IS_FAILURE);
             return;
         }
+        List<AssessmentItemVo> assessmentItems = dataCenterService.getData("assessmentItems");
+        String deptId = department.getId();
+        departmentDao.DeleteAssessmentItemByDepartmentId(deptId);
+
+        Boolean res2 = departmentDao.InsertAssessmentItems(assessmentItems, deptId);
+        if (!res2) {
+            ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.INSERT_IS_FAILURE);
+            return;
+        }
         setReturnDataOfSuccess();
     }
 
@@ -75,22 +83,7 @@ public class DeptManagementBusinessService {
         setReturnDataOfSuccess(jsonObject);
     }
 
-    @Transactional
-    public void addAssessmentItemForDepartmentRequestProcess() {
-        List<AssessmentItemVo> assessmentItems = dataCenterService.getData("assessmentItems");
-        String deptId = dataCenterService.getData("deptId");
-        ResponseData responseData = dataCenterService.getResponseDataFromDataLocal();
-        departmentDao.DeleteAssessmentItemByDepartmentId(deptId);
 
-
-        Boolean res2 = departmentDao.InsertAssessmentItems(assessmentItems, deptId);
-        if (!res2) {
-            ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.INSERT_IS_FAILURE);
-            return;
-        }
-        setReturnDataOfSuccess();
-
-    }
 
     public void getAssessmentItemsByDepartmentIdRequestProcess() {
         String deptId = dataCenterService.getData("deptId");
