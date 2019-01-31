@@ -3,7 +3,10 @@ package cn.edu.fjnu.towide.ww.usercenter.enums;
 import cn.edu.fjnu.towide.enums.IReasonOfFailure;
 
 public enum ReasonOfFailure implements IReasonOfFailure{
-	OPENID_IS_EMPTY("The parameters submitted are incorrect", "OpenId不能为空"),//此处添加枚举值
+	USERNAME_IS_EMPTY("The parameters submitted are incorrect", "用户名不能为空"),//此处添加枚举值
+	PASSWORD_IS_EMPTY("The parameters submitted are incorrect", "密码不能为空"),//此处添加枚举值
+	REALNAME_IS_EMPTY("The parameters submitted are incorrect", "真实姓名不能为空"),//此处添加枚举值
+
 	PHONE_IS_ERROR("The parameters submitted are incorrect", "手机号格式错误"),//此处添加枚举值
 	IDNUM_IS_ERROR("The parameters submitted are incorrect", "身份证号格式错误"),//此处添加枚举值
 	EMAIL_IS_EMPTY("The parameters submitted are incorrect", "邮箱号不能为空"),//此处添加枚举值
@@ -23,7 +26,6 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 	IDCARD_IS_ILLEGAL("The parameters submitted are incorrect","身份证号非法,'X'需大写"),
 	PHONE_NUM_IS_ILLEGAL("The parameters submitted are incorrect","手机号非法" ),
 	ADMISSION_NOTICE_ID_IS_EMPTY("The parameters submitted are incorrect", "录取通知书编号不能为空"),
-	PASSWORD_IS_EMPTY("The parameters submitted are incorrect", "密码不能为空"),
 	USER_NAME_IS_EMPTY("The parameters submitted are incorrect", "用户名不能为空");//此处添加枚举值
 
 	private String en_msg;

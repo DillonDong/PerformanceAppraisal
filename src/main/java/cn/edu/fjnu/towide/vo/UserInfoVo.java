@@ -7,10 +7,11 @@ import lombok.Data;
 public class UserInfoVo {
 
     private String username;
-    private String nickname;
-    private String head;
-    private String province;
-    private String city;
+    private String realName;
+    private String baseSalary;//底薪
+    private String code;//编号
+    private String name;//部门名称
+    private String remarks;//备注
 
 
 }

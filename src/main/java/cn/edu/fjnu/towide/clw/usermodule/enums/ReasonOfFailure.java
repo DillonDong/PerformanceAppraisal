@@ -11,8 +11,9 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 	ADMISSION_NOTICE_ID_IS_EMPTY("The parameters submitted are incorrect", "录取通知书编号不能为空"), 
 	PASSWORD_IS_EMPTY("The parameters submitted are incorrect", "密码不能为空"),
 	OPENID_IS_WRONG("The parameters submitted are incorrect", "OpenId错误"),
-
-	OPENID_IS_EMPTY("The parameters submitted are incorrect", "OpenId不能为空"),
+	TIME_IS_EMPTY("The parameters submitted are incorrect", "时间不能为空"),
+	DELETE_IS_WRONG("The parameters submitted are incorrect", "删除失败"),
+	PAGEINFO_ERROR("PageInfoError", "分页信息错误"),//此处添加枚举值
 
 	USER_NAME_IS_EMPTY("The parameters submitted are incorrect", "用户名不能为空");//此处添加枚举值
 

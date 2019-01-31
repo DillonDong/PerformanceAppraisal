@@ -12,7 +12,6 @@ import cn.edu.fjnu.towide.entity.UserDetails;
 import cn.edu.fjnu.towide.enums.ReasonOfFailure;
 import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.*;
-import cn.edu.fjnu.towide.vo.UserInfoVo;
 import cn.edu.fjnu.towide.ww.usercenter.constant.WeChatReasonOfFailureConstant;
 import com.alibaba.fastjson.JSONObject;
 import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
@@ -237,67 +236,65 @@ public class UserCenterBusinessService {
      */
     @Transactional
     public void getUserRegistrationRequestProcess() {
-        UserInfoVo userInfoVo = dataCenterService.getData("userInfoVo");
+        String username = dataCenterService.getData("username");
+        String password = dataCenterService.getData("password");
+        String newPassword = CommonUtil.passwordEncodeByBCrypt(password);
+
+        String realName = dataCenterService.getData("realName");
+        String remarks = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("remarks");
+        String code = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("code");
+
+        boolean isUserExistCheck=userDao.isUserExist(username);
+        if(isUserExistCheck){
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.USER_EXIST);
+        }
 
         User user = new User();
-        user.setUsername(userInfoVo.getUsername());
-        String newPassword = CommonUtil.passwordEncodeByBCrypt(user.getDefaultPassword());
+        user.setUsername(username);
         user.setPassword(newPassword);
         user.setEnabled(ENABLE);
         boolean addResult1 = userDao.addUsers(user);
+
         //将注册的用户信息写到数据库中
         UserDetails userDetails = new UserDetails();
-        userDetails.setUsername(userInfoVo.getUsername());
-
+        userDetails.setUsername(username);
+        userDetails.setRealName(realName);
+        userDetails.setRemarks(remarks);
+        userDetails.setCode(code);
 
         userDetails.setCreateTime(new Date());
         userDetails.setUpdateTime(new Date());
-
         boolean addResult2 = userDao.addUserDetails(userDetails);
 
-        if (!addResult1 || !addResult2) {
+        if (!addResult1 || !addResult2 ) {
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.USER_REGISTRATION_ERROR);
         }
 
-        responseUtil(null, null);
+        responseUtil(null,null);
 
-    }
+}
 
 
     /**
-     * 忘记密码业务逻辑
+     * 更新密码业务逻辑
      */
     @Transactional
     public void forgetPasswordRequestProcess() {
 
-        String idCardNum = dataCenterService.getData("idCardNum");
-        String email = dataCenterService.getData("email");
-
-        String username = userDao.getUsernameFromIdCardNum(idCardNum);
-        Date updateTime = userDao.getUpdateTimeFromUsername(username);
-        Date now = new Date();
-        //连续操作时间间隔不能小于1分钟
-        if ((now.getTime() - updateTime.getTime()) / (1000 * 60) < 1) {
-            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.OPERATION_TIME_INTERVAL_ERROR);
-        }
-        //生成新密码推送给用户
-        String password = IdGenerator.getId();
+        User currentLoginUser = dataCenterService.getCurrentLoginUserFromDataLocal();
+        String username = currentLoginUser.getUsername();
+        String password = dataCenterService.getData("password");
         String newPassword = CommonUtil.passwordEncodeByBCrypt(password);
+
+        Date updateTime = userDao.getUpdateTimeFromUsername(username);
+
         boolean isUpdatePasswordSuccess = userDao.updatePasswordForUsers(newPassword, username);
         boolean isUpdateTimeSuccess = userDao.updateTime(new Date(), username);
         if (!isUpdatePasswordSuccess || !isUpdateTimeSuccess) {
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.PASSWORD_UPDATE_ERROR);
         }
 
-        isPushMailSuccess(username, password, email);
-
         responseUtil(null, null);
     }
 
-    //把账号密码推送给用户
-    public void isPushMailSuccess(String username, String password, String email) {
-        String content = "账号：" + username + "   " + "密码：" + password;
-
-        pushMailUtil.SampleMail(content, email);
-    }
 }

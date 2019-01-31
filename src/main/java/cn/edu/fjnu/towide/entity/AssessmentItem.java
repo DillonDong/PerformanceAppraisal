@@ -1,8 +1,7 @@
 package cn.edu.fjnu.towide.entity;
 
-import lombok.ToString;
 
-@ToString
+
 public class AssessmentItem {
 
   private String id;

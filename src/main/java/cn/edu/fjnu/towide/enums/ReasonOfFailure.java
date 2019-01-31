@@ -9,6 +9,7 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 	LOGIN_ERROR("LoginError", "未登录或登录失败！"),
 	DATA_NOT_MATCH("DataNotMatch", "数据与接口需求不匹配"),
 	THE_PARAMETERS_SUBMITTED_ARE_INCORRECT("The parameters submitted are incorrect","提交的参数有误"),
+	USER_EXIST("UserDoesNotExist","用户名已存在"),
 
 	OPERATION_TIME_INTERVAL_ERROR("operation_time_interval_error", "操作时间间隔小于1分钟"),
     PUSH_MAIL_ERROR("push_mail_error", "邮箱推送失败"),

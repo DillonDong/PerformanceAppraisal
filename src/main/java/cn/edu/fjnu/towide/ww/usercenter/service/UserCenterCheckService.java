@@ -3,9 +3,7 @@ package cn.edu.fjnu.towide.ww.usercenter.service;
 import cn.edu.fjnu.towide.dao.UserDao;
 import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.*;
-import cn.edu.fjnu.towide.vo.UserInfoVo;
 import cn.edu.fjnu.towide.ww.usercenter.enums.ReasonOfFailure;
-import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,56 +66,40 @@ public class UserCenterCheckService {
      *  用户注册
      */
     public void getUserRegistrationRequestCheck() {
-        // String openid = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("openid");
-        // String nickName = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("nickName");
-        // String avatarUrl = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("avatarUrl");
-        // String province = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("province");
-        // String city = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("city");
-        JSONObject userInfoVoJSONObject = dataCenterService
-                .getParamValueFromParamOfRequestParamJsonByParamName("userInfoVo");
-        UserInfoVo userInfoVo = userInfoVoJSONObject.toJavaObject(UserInfoVo.class);
-        if(userInfoVo==null){
-            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.USERINFO_IS_EMPTY);
-            return;
-        }
-        boolean checkName = CheckVariableUtil.stringVariableIsEmpty(userInfoVo.getUsername());
+        String username = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("username");
+        String password = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("password");
+        String realName = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("realName");
 
-
-        if (checkName) {
-            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.OPENID_IS_EMPTY);
+        if (CheckVariableUtil.stringVariableIsEmpty(username)) {
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.USERNAME_IS_EMPTY);
         }
 
-        dataCenterService.setData("userInfoVo", userInfoVo);
+        if (CheckVariableUtil.stringVariableIsEmpty(password)) {
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.PASSWORD_IS_EMPTY);
+        }
+
+        if (CheckVariableUtil.stringVariableIsEmpty(realName)) {
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.REALNAME_IS_EMPTY);
+        }
+
+        dataCenterService.setData("username", username);
+        dataCenterService.setData("password", password);
+        dataCenterService.setData("realName", realName);
 
     }
 
     /**
-     *  忘记密码校验
+     *  更新密码校验
      */
     public void forgetPasswordRequestCheck() {
 
-        String idCardNum = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("idNum");
-        String email = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("email");
+        String password = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("password");
 
-        boolean checkIdCardNum = CheckVariableUtil.isIdcardIllegal(idCardNum);
-        boolean checkEmail = CheckVariableUtil.stringVariableIsEmpty(email);
-
-
-        if (checkIdCardNum) {
-            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.IDNUM_IS_ERROR);
+        if (CheckVariableUtil.stringVariableIsEmpty(password)) {
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.PASSWORD_IS_EMPTY);
         }
 
-        if (checkEmail) {
-            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.EMAIL_IS_EMPTY);
-        }
-
-        String emailFromIdCardNum = userDao.getEmailFromIdCardNum(idCardNum);
-        if (emailFromIdCardNum == null || (!email.equals(emailFromIdCardNum))) {
-            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.USER_DOES_NOT_EXIST);
-        }
-
-        dataCenterService.setData("idCardNum", idCardNum);
-        dataCenterService.setData("email", email);
+        dataCenterService.setData("password", password);
 
     }
 }

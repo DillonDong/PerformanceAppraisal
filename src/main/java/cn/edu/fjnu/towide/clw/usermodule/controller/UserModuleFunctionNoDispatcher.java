@@ -30,6 +30,19 @@ public class UserModuleFunctionNoDispatcher {
             case UserModuleFunctionNoConstants.IS_USER_EXIST:
                 userModuleService.isUserExistRequestProcess();
                 break;
+            case UserModuleFunctionNoConstants.USER_EXAMINATION_ITEMS_IN_ADD:
+                userModuleService.getUserExaminationItemsInAddRequestProcess();
+                break;
+            case UserModuleFunctionNoConstants.USER_EXAMINATION_ITEMS_IN_GET:
+                userModuleService.getUserExaminationItemsInGetRequestProcess();
+                break;
+            case UserModuleFunctionNoConstants.DELETE_EXAMINATION_ITEMS:
+                userModuleService.deleteExaminationItemsRequestProcess();
+                break;
+            case UserModuleFunctionNoConstants.GET_USER_INFO_LIST:
+                userModuleService.getUserInfoListRequestProcess();
+                break;
+
             default:
                 ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.FUNCTION_NO_ARE_INCORRECT);
                 break;
