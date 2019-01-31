@@ -1,6 +1,5 @@
 package cn.edu.fjnu.towide.xxx.deptManagement.service;
 
-import cn.edu.fjnu.towide.entity.AssessmentItem;
 import cn.edu.fjnu.towide.entity.Department;
 import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.CheckVariableUtil;

@@ -25,10 +25,12 @@ public class AssessmentItemManagementCheckService {
     public void addAssessmentItemRequestCheck() {
 
         JSONObject jsonObject = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("assessmentItem");
+        System.out.println("---"+jsonObject+"-----");
         if (jsonObject==null){
             ExceptionUtil.throwRequestFailureException();
         }
         AssessmentItem assessmentItem = jsonObject.toJavaObject(AssessmentItem.class);
+        System.out.println("---"+assessmentItem+"-----");
         if (CheckVariableUtil.stringVariableIsEmpty(assessmentItem.getName())){
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.NAME_IS_EMPTY);
         }

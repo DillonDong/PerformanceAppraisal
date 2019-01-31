@@ -11,7 +11,9 @@ import cn.edu.fjnu.towide.xxx.deptManagement.enums.ReasonOfFailure;
 import cn.edu.fjnu.towide.xxx.deptManagement.vo.AssessmentItemVo;
 import cn.edu.fjnu.towide.xxx.deptManagement.vo.AssessmentItemWithWeightVo;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,9 +68,10 @@ public class DeptManagementBusinessService {
 
         PageHelper.startPage(pageNum,pageSize);
         List<Department> departmentList= departmentDao.GetDepartmentList(name);
+        PageInfo<Department> page = new PageInfo<>(departmentList);
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("departmentList",departmentList);
+        jsonObject.put("departmentList",page);
         setReturnDataOfSuccess(jsonObject);
     }
 

@@ -8,6 +8,7 @@ import cn.edu.fjnu.towide.util.*;
 import cn.edu.fjnu.towide.xxx.assessmentItemManagement.enums.ReasonOfFailure;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,8 +64,9 @@ public class AssessmentItemManagementBusinessService {
         PageHelper.startPage(pageNum,pageSize);
         List<AssessmentItem> assessmentItemList = assessmentItemDao.getAssessmentItemList(name);
 
+        PageInfo<AssessmentItem> pageInfo = new PageInfo<>(assessmentItemList);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("assessmentItemList",assessmentItemList);
+        jsonObject.put("assessmentItemList",pageInfo);
         setReturnDataOfSuccess(jsonObject);
 
     }

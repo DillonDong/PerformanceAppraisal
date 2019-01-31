@@ -1,6 +1,6 @@
 package cn.edu.fjnu.towide.xxx.deptManagement.constant;
 
-import cn.edu.fjnu.towide.entity.Department;
+
 
 public interface DeptManagementFunctionNoConstants {
 
