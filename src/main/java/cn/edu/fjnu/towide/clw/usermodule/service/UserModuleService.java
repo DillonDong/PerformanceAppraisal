@@ -51,4 +51,13 @@ public class UserModuleService {
         userModuleCheckService.deleteExaminationItemsRequestCheck();
         userModuleBusinessService.deleteExaminationItemsRequestProcess();
     }
+
+
+	/**
+	 * @Description: 获取用户信息列表
+	 */
+	public void getUserInfoListRequestProcess() {
+		userModuleCheckService.getUserInfoListRequestCheck();
+		userModuleBusinessService.getUserInfoListRequestProcess();
+	}
 }

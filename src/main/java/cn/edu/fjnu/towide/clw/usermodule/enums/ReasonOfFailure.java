@@ -13,6 +13,7 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 	OPENID_IS_WRONG("The parameters submitted are incorrect", "OpenId错误"),
 	TIME_IS_EMPTY("The parameters submitted are incorrect", "时间不能为空"),
 	DELETE_IS_WRONG("The parameters submitted are incorrect", "删除失败"),
+	PAGEINFO_ERROR("PageInfoError", "分页信息错误"),//此处添加枚举值
 
 	USER_NAME_IS_EMPTY("The parameters submitted are incorrect", "用户名不能为空");//此处添加枚举值
 

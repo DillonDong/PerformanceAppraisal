@@ -2,7 +2,6 @@ package cn.edu.fjnu.towide.dao;
 
 import cn.edu.fjnu.towide.entity.User;
 import cn.edu.fjnu.towide.entity.UserDetails;
-import cn.edu.fjnu.towide.vo.UserInfoVo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

@@ -75,11 +75,21 @@ public interface UserDetailDao {
 
 
     /**
-     *  存储用户信息
+     * @Description: 获取用户信息列表
      */
-    @Insert("INSERT INTO user(username,nickname,head,province,city) "
-            +"VALUES (#{username},#{nickname},#{head},#{province},#{city})")
-    boolean addUserInfo(UserInfoVo userInfoVo);
+    @Select("<script>"+"SELECT username,real_name,remarks,base_salary,code,d.name "
+            + "FROM user_details as u "
+            + "LEFT JOIN department as d ON u.dept_id=d.id "
+            + "WHERE 1=1 "
+            + "<if test=\"keyword!=null and keyword!=\'\' \"> "
+            + "AND real_name like concat('%', #{keyword}, '%') "+ "</if> "
+            +"</script>"
+    )
+    List<UserInfoVo> getUserInfoList(@Param("keyword") String keyword);
+
+
+
+
 
     // @Insert("REPLACE user_details(username,phone,email,gender,nickname,birthday,last_update_time) VALUES (#{username},#{phone},#{email},#{sex},#{nickname},#{birthday},#{updateTime})")
     // boolean updateUserInformation(UserDetails userDetails);

@@ -3,9 +3,7 @@ package cn.edu.fjnu.towide.ww.usercenter.service;
 import cn.edu.fjnu.towide.dao.UserDao;
 import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.*;
-import cn.edu.fjnu.towide.vo.UserInfoVo;
 import cn.edu.fjnu.towide.ww.usercenter.enums.ReasonOfFailure;
-import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

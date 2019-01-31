@@ -27,17 +27,28 @@ public class UserModuleCheckService {
         }
     }
 
-    // 获取用户薪资信息
-    public void getUserInfoRequestCheck() {
-        int pageNum = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("pageNum");
-        int pageSize = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("pageSize");
+    // 检查分页信息
+    private void checkpageInfo() {
 
+        Integer pageNum = null;
+        Integer pageSize = null;
+
+        try {// 检查分页参数
+            pageNum = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("pageNum");
+            pageSize = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("pageSize");
+        } catch (Exception e) {
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.PAGEINFO_ERROR);
+        }
         checkEmptyIntVariable(pageNum);
         checkEmptyIntVariable(pageSize);
 
         dataCenterService.setData("pageNum", pageNum);
         dataCenterService.setData("pageSize", pageSize);
+    }
 
+    // 获取用户薪资信息
+    public void getUserInfoRequestCheck() {
+        checkpageInfo();
     }
 
 
@@ -62,12 +73,15 @@ public class UserModuleCheckService {
         checkTimeAndUsername();
     }
 
+
     /**
      * @Description: 删除用户未审核的某月业绩考核
      */
     public void deleteExaminationItemsRequestCheck() {
         checkTimeAndUsername();
     }
+
+
 
     public void checkTimeAndUsername() {
         String time = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("time");
@@ -81,5 +95,14 @@ public class UserModuleCheckService {
         dataCenterService.setData("time", time);
         dataCenterService.setData("username", username);
     }
+
+
+    /**
+     * @Description: 获取用户信息列表
+     */
+    public void getUserInfoListRequestCheck() {
+        checkpageInfo();
+    }
+
 
 }

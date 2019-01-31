@@ -12,7 +12,6 @@ import cn.edu.fjnu.towide.entity.UserDetails;
 import cn.edu.fjnu.towide.enums.ReasonOfFailure;
 import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.*;
-import cn.edu.fjnu.towide.vo.UserInfoVo;
 import cn.edu.fjnu.towide.ww.usercenter.constant.WeChatReasonOfFailureConstant;
 import com.alibaba.fastjson.JSONObject;
 import net.sf.jsqlparser.expression.DateTimeLiteralExpression;

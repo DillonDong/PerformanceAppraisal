@@ -124,4 +124,21 @@ public class UserModuleBusinessService {
         }
         responseUtil(null,null);
     }
+
+
+    /**
+     * @Description: 获取用户信息列表
+     */
+    public void getUserInfoListRequestProcess() {
+        int pageNum = dataCenterService.getData("pageNum");
+        int pageSize = dataCenterService.getData("pageSize");
+        String keyword = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("keyword");
+
+        PageHelper.startPage(pageNum, pageSize);
+
+        List<UserInfoVo> userInfoVo=userDetailDao.getUserInfoList(keyword);
+        PageInfo<UserInfoVo> pageResult = new PageInfo<UserInfoVo>(userInfoVo);
+
+        responseUtil("pageResult",pageResult);
+    }
 }
