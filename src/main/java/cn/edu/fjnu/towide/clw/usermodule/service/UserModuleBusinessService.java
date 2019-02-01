@@ -3,6 +3,12 @@ package cn.edu.fjnu.towide.clw.usermodule.service;
 import cn.edu.fjnu.towide.dao.UserDetailDao;
 import cn.edu.fjnu.towide.entity.*;
 import cn.edu.fjnu.towide.util.CheckVariableUtil;
+import cn.edu.fjnu.towide.util.IdGenerator;
+import cn.edu.fjnu.towide.vo.CountVo;
+import cn.edu.fjnu.towide.vo.DeptAsVo;
+import cn.edu.fjnu.towide.vo.UserDetailInfoVo;
+import cn.edu.fjnu.towide.xxx.fileupload.constant.LogConstant;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -21,7 +27,11 @@ import cn.edu.fjnu.towide.util.ExceptionUtil;
 import cn.edu.fjnu.towide.util.ResponseDataUtil;
 import cn.edu.fjnu.towide.vo.UserInfoVo;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static cn.edu.fjnu.towide.constant.FilePathNameTemplate.uploadFileLocalPath;
 
 @Service
 public class UserModuleBusinessService {
@@ -117,11 +127,13 @@ public class UserModuleBusinessService {
         boolean deleteUserSalaryInfoCheck=userDetailDao.deleteUserSalaryInfo(username,time);
         if (!deleteUserSalaryInfoCheck) {
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.DELETE_IS_WRONG);
+            return;
         }
         boolean deleteUserExaminationItemsCheck=userDetailDao.deleteUserExaminationItems(username,time);
         if (!deleteUserExaminationItemsCheck) {
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.DELETE_IS_WRONG);
-        }
+			return;
+		}
         responseUtil(null,null);
     }
 
@@ -141,4 +153,89 @@ public class UserModuleBusinessService {
 
         responseUtil("pageResult",pageResult);
     }
+
+
+	/**
+	 * @Description: 获取用户详细信息
+	 */
+	public void getUserDetailedInfoRequestProcess() {
+		String username = dataCenterService.getData("username");
+		UserDetailInfoVo userDetailInfo=userDetailDao.getUserDetailedInfoList(username);
+		userDetailInfo.setIdPre(uploadFileLocalPath +userDetailInfo.getIdPre());
+		userDetailInfo.setIdAfter(uploadFileLocalPath +userDetailInfo.getIdAfter());
+		responseUtil("userDetailInfo",userDetailInfo);
+	}
+
+
+	/**
+	 * @Description: 添加绩效
+	 */
+	public void addExaminationItemsRequestProcess() {
+		JSONArray examinationItems = dataCenterService
+				.getParamValueFromParamOfRequestParamJsonByParamName("examinationItemsList");
+		if(examinationItems==null||examinationItems.size()==0) {
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.EXAMINATION_ITEMS_EMPTY);
+			return;
+		}
+		User currentLoginUser = dataCenterService.getCurrentLoginUserFromDataLocal();
+		String username = currentLoginUser.getUsername();
+		//数组第一个为时间
+		String time=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(0))).getString("value");
+		//数组第二个为营业额
+		Double turnover=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(1))).getDouble("value");
+
+		Map<String,Double> countMap=new HashMap<>();
+		for(int i=2;i<examinationItems.size();i++){
+			String examinationItemId=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getString("examinationItemId");
+			Double value=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getDouble("value");
+			CountVo bigger=userDetailDao.getBiggerCount(examinationItemId,value);
+			CountVo smaller=userDetailDao.getSmallerCount(examinationItemId,value);
+			//计算比例
+			double bili=(bigger.getLevel()-smaller.getLevel()) / (bigger.getCount()-smaller.getCount());
+			//计算分数
+			double count=(value-smaller.getLevel()) / bili+smaller.getCount();
+			//把考核项目和分数放到map中
+			countMap.put(examinationItemId,count);
+			//把考核项目和分数存到user_assessment表中
+			UserAssessment userAssessment=new UserAssessment();
+			userAssessment.setId(IdGenerator.getId());
+			userAssessment.setTime(time);
+			String assessmentItemName=userDetailDao.getAssessmentItemName(examinationItemId);
+			userAssessment.setAssessmentItem(assessmentItemName);
+			userAssessment.setCount(count);
+
+			userAssessment.setUserId(username);
+			boolean addSuccess=userDetailDao.addAssessmentItemAndCount(userAssessment);
+			if(!addSuccess){
+				ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.ADD_EXAMINATION_ITEMS_WRONG);
+				return;
+			}
+		}
+		String deptId=userDetailDao.getDeptIdByUserName(username);
+
+		List<DeptAsVo> assessmentList=userDetailDao.getDeptAssessmentList(deptId);
+		double totalCount=0;
+		for (Map.Entry<String, Double> myItems : countMap.entrySet()) {
+			for (DeptAsVo deptAsVo : assessmentList) {
+				if(myItems.getKey().equals(deptAsVo.getAsId())){
+
+				}
+			}
+		}
+
+	}
+
+
+	/**
+	 * @Description: 更新用户详细信息
+	 */
+	public void updateUserDetailedInfoRequestProcess() {
+		UserDetailInfoVo userDetailInfo = dataCenterService.getData("userDetailInfo");
+		boolean updateUserDetailResult =userDetailDao.updateUserDetailedInfo(userDetailInfo);
+		if (!updateUserDetailResult) {
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.UPDATE_ERROR);
+			return;
+		}
+		responseUtil(null,null);
+	}
 }

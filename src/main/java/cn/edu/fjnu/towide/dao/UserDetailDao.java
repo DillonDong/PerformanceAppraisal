@@ -1,6 +1,9 @@
 package cn.edu.fjnu.towide.dao;
 
 import cn.edu.fjnu.towide.entity.*;
+import cn.edu.fjnu.towide.vo.CountVo;
+import cn.edu.fjnu.towide.vo.DeptAsVo;
+import cn.edu.fjnu.towide.vo.UserDetailInfoVo;
 import cn.edu.fjnu.towide.vo.UserInfoVo;
 import org.apache.ibatis.annotations.*;
 
@@ -88,8 +91,82 @@ public interface UserDetailDao {
     List<UserInfoVo> getUserInfoList(@Param("keyword") String keyword);
 
 
+    /**
+     * @Description: 获取用户详细信息
+     */
+    @Select("SELECT username,real_name,remarks,base_salary,code,dept_id,id_pre,id_after "
+            + "FROM user_details as u "
+            + "WHERE username=#{username}"
+    )
+    UserDetailInfoVo getUserDetailedInfoList(String username);
 
 
+    /**
+     * @Description: 更新用户详细信息
+     */
+    @Update("UPDATE user_details SET base_salary=#{baseSalary},code=#{code},remarks=#{remarks},"
+            +"dept_id=#{deptId},id_pre=#{idPre},id_after=#{idAfter} "
+            +"WHERE username=#{username}")
+    boolean updateUserDetailedInfo(UserDetailInfoVo p);
+
+
+
+
+    /**
+     * @Description: 找大于此水平的分数
+     */
+    @Select("SELECT min(level),min(count) "
+            + "FROM count "
+            + "WHERE level>=#{value} and as_id=#{itemId}"
+    )
+    CountVo getBiggerCount(@Param("itemId")String itemId, @Param("value")Double value);
+
+
+    /**
+     * @Description: 找小于此水平的分数
+     */
+    @Select("SELECT max(level),max(count) "
+            + "FROM count "
+            + "WHERE level<=#{value} and as_id=#{itemId}"
+    )
+    CountVo getSmallerCount(@Param("itemId")String itemId, @Param("value")Double value);
+
+
+    /**
+     * @Description:
+     */
+    @Select("SELECT name "
+            + "FROM assessment_item "
+            + "WHERE id=#{itemId}"
+    )
+    String getAssessmentItemName(String itemId);
+
+
+    /**
+     * @Description: 保存用户考核项
+     */
+    @Insert("REPLACE INTO user_assessment VALUES(" +
+            "#{id},#{userId},#{assessmentItem},#{count},#{time})")
+    boolean addAssessmentItemAndCount(UserAssessment userAssessment);
+
+
+    /**
+     * @Description:
+     */
+    @Select("SELECT dept_id "
+            + "FROM user_details "
+            + "WHERE username=#{username}"
+    )
+    String getDeptIdByUserName(String username);
+
+    /**
+     * @Description: 获取部门考核项列表
+     */
+    @Select("SELECT as_id,weight "
+            + "FROM dept_as "
+            + "WHERE dept_id=#{dept_id} "
+    )
+    List<DeptAsVo> getDeptAssessmentList(String dept_id);
 
     // @Insert("REPLACE user_details(username,phone,email,gender,nickname,birthday,last_update_time) VALUES (#{username},#{phone},#{email},#{sex},#{nickname},#{birthday},#{updateTime})")
     // boolean updateUserInformation(UserDetails userDetails);

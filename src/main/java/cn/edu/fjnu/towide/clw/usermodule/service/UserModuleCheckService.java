@@ -3,11 +3,18 @@ package cn.edu.fjnu.towide.clw.usermodule.service;
 import cn.edu.fjnu.towide.clw.usermodule.enums.ReasonOfFailure;
 import cn.edu.fjnu.towide.util.CheckVariableUtil;
 import cn.edu.fjnu.towide.util.ExceptionUtil;
+import cn.edu.fjnu.towide.vo.UserDetailInfoVo;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.edu.fjnu.towide.dao.UserDao;
 import cn.edu.fjnu.towide.service.DataCenterService;
+
+import java.util.List;
+import java.util.Map;
 
 import static cn.edu.fjnu.towide.util.ExceptionUtil.throwRequestFailureException;
 
@@ -105,4 +112,49 @@ public class UserModuleCheckService {
     }
 
 
+
+    /**
+     * @Description: 获取用户详细信息
+     */
+    public void getUserDetailedInfoRequestCheck() {
+        String username = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("username");
+        if (CheckVariableUtil.stringVariableIsEmpty(username)) {
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.USER_NAME_IS_EMPTY);
+        }
+        dataCenterService.setData("username", username);
+    }
+
+
+    /**
+     * @Description: 更新用户详细信息
+     */
+    public void updateUserDetailedInfoRequestCheck() {
+        JSONObject userDetailInfoJSONObject = dataCenterService
+                .getParamValueFromParamOfRequestParamJsonByParamName("userDetailInfoVo");
+        UserDetailInfoVo userDetailInfo = userDetailInfoJSONObject.toJavaObject(UserDetailInfoVo.class);
+        if(userDetailInfo==null){
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.UPDATE_ERROR);
+            return;
+        }
+        dataCenterService.setData("userDetailInfo", userDetailInfo);
+    }
+
+
+    /**
+     * @Description: 添加绩效
+     */
+    public void addExaminationItemsRequestCheck() {
+        JSONArray examinationItems = dataCenterService
+                .getParamValueFromParamOfRequestParamJsonByParamName("examinationItemsList");
+        if(examinationItems==null||examinationItems.size()==0) {
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.EXAMINATION_ITEMS_EMPTY);
+            return;
+        }
+
+        for(int i=0;i<examinationItems.size();i++){
+            String examinationItemId=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getString("examinationItemId");
+            Double value=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getDouble("value");
+        }
+
+    }
 }

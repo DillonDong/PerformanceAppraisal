@@ -60,4 +60,29 @@ public class UserModuleService {
 		userModuleCheckService.getUserInfoListRequestCheck();
 		userModuleBusinessService.getUserInfoListRequestProcess();
 	}
+
+	/**
+	 * @Description: 获取用户详细信息
+	 */
+	public void getUserDetailedInfoRequestProcess() {
+		userModuleCheckService.getUserDetailedInfoRequestCheck();
+		userModuleBusinessService.getUserDetailedInfoRequestProcess();
+	}
+
+
+	/**
+	 * @Description: 更新用户详细信息
+	 */
+	public void updateUserDetailedInfoRequestProcess() {
+		userModuleCheckService.updateUserDetailedInfoRequestCheck();
+		userModuleBusinessService.updateUserDetailedInfoRequestProcess();
+	}
+
+	/**
+	 * @Description: 添加绩效
+	 */
+	public void addExaminationItemsRequestProcess() {
+		userModuleCheckService.addExaminationItemsRequestCheck();
+		userModuleBusinessService.addExaminationItemsRequestProcess();
+	}
 }

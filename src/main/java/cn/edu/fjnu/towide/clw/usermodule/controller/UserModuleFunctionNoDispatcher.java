@@ -42,7 +42,15 @@ public class UserModuleFunctionNoDispatcher {
             case UserModuleFunctionNoConstants.GET_USER_INFO_LIST:
                 userModuleService.getUserInfoListRequestProcess();
                 break;
-
+            case UserModuleFunctionNoConstants.GET_USER_DETAILED_INFO:
+                userModuleService.getUserDetailedInfoRequestProcess();
+                break;
+            case UserModuleFunctionNoConstants.UPDATE_USER_DETAILED_INFO:
+                userModuleService.updateUserDetailedInfoRequestProcess();
+                break;
+            case UserModuleFunctionNoConstants.ADD_EXAMINATION_ITEMS:
+                userModuleService.addExaminationItemsRequestProcess();
+                break;
             default:
                 ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.FUNCTION_NO_ARE_INCORRECT);
                 break;
