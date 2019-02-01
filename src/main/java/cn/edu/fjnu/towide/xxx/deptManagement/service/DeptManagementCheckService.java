@@ -35,8 +35,25 @@ public class DeptManagementCheckService {
         if (CheckVariableUtil.stringVariableIsEmpty(department.getId())){
             department.setId(IdGenerator.getId());
         }
-        dataCenterService.setData("department",department);
 
+        JSONArray jsonArray =dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("assessmentItems");
+
+        if(jsonArray==null){
+            ExceptionUtil.throwRequestFailureException();
+        }
+        List<AssessmentItemVo> assessmentItems = jsonArray.toJavaList(AssessmentItemVo.class);
+
+
+        assessmentItems.stream().forEach(
+                assessmentItemVo -> {
+                    if (assessmentItemVo.getWeight()==null||assessmentItemVo.getWeight()<=0){
+                        ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.WEIGHT_SHOULD_OVER_ZERO);
+                    }
+                }
+        );
+
+        dataCenterService.setData("assessmentItems",assessmentItems);
+        dataCenterService.setData("department",department);
 
     }
 
@@ -57,29 +74,7 @@ public class DeptManagementCheckService {
     }
 
 
-    public void addAssessmentItemForDepartmentRequestCheck() {
-        JSONArray jsonArray =dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("assessmentItems");
-        String deptId = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("deptId");
-        if (CheckVariableUtil.stringVariableIsEmpty(deptId)){
-            ExceptionUtil.throwRequestFailureException();
-        }
-        if(jsonArray==null){
-            ExceptionUtil.throwRequestFailureException();
-        }
-        List<AssessmentItemVo> assessmentItems = jsonArray.toJavaList(AssessmentItemVo.class);
 
-        assessmentItems.stream().forEach(
-                assessmentItemVo -> {
-                    if (assessmentItemVo.getWeight()==null||assessmentItemVo.getWeight()<=0){
-                        ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.WEIGHT_SHOULD_OVER_ZERO);
-                    }
-                }
-        );
-
-        dataCenterService.setData("deptId",deptId);
-        dataCenterService.setData("assessmentItems",assessmentItems);
-
-    }
 
     public void getAssessmentItemsByDepartmentIdRequestCheck() {
         String deptId = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("deptId");

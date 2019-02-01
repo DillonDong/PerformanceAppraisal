@@ -34,7 +34,7 @@ public interface DepartmentDao {
 
 
     @Delete("DELETE FROM dept_as WHERE dept_id = #{deptId}")
-    Boolean DeleteAssessmentItemByDepartmentId(String deptId);
+    void DeleteAssessmentItemByDepartmentId(String deptId);
 
 
 
@@ -52,13 +52,16 @@ public interface DepartmentDao {
     @Select("SELECT id,name,weight FROM dept_as LEFT JOIN assessment_item ON dept_as.as_id = assessment_item.id WHERE dept_id = #{deptId}")
     List<AssessmentItemWithWeightVo> GetAssessmentItemsByDepartmentId(String deptId);
 
+    @Select("SELECT * FROM department WHERE id = #{deptId}")
+    Department GetDepartmentByDepartmentId(String deptId);
+
     @Delete("<script>"
             +   "DELETE FROM dept_as WHERE dept_id IN "
             +   "<foreach collection='deptId' item='id' open='(' close=')' separator=','>"
             +       "#{id}"
             +   "</foreach>"
             + "</script>")
-    Boolean DeleteAssessmentItemByDeptId(@Param("deptId") List<String> deptId);
+    void DeleteAssessmentItemByDeptId(@Param("deptId") List<String> deptId);
 
 
     @Delete("<script>"

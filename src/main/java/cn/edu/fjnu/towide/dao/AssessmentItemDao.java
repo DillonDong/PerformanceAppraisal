@@ -1,6 +1,8 @@
 package cn.edu.fjnu.towide.dao;
 
 import cn.edu.fjnu.towide.entity.AssessmentItem;
+import cn.edu.fjnu.towide.xxx.assessmentItemManagement.vo.CountVo;
+import cn.edu.fjnu.towide.xxx.deptManagement.vo.AssessmentItemVo;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -44,4 +46,23 @@ public interface AssessmentItemDao {
             +   "</foreach>"
             + "</script>")
     Boolean DeleteAssessmentItemByAsId(@Param("asId") List<String> asId);
+
+
+    @Delete("DELETE FROM count WHERE as_id = #{asId}")
+    void DeleteCountByAsId(String asId);
+
+    @Insert("<script>" +
+            "   INSERT INTO count (as_id,level,count) " +
+            "   VALUES" +
+            "   <foreach collection='list' item='item' separator=','>" +
+            "       (#{as_id},#{item.level},#{item.count})" +
+            "   </foreach>" +
+            "</script>")
+    Boolean InsertAssessmentItemCount(@Param("list")List<CountVo> list, @Param("as_id")String asId);
+
+    @Select("SELECT level,count FROM count WHERE as_id = #{asId}")
+    List<CountVo> GetAssessmentItemLevelAndCountByAsId(String asId);
+
+    @Select("SELECT * FROM assessment_item WHERE id = #{asId}")
+    AssessmentItem GetAssessmentItemByAsId(String asId);
 }

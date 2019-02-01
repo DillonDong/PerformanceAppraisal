@@ -29,4 +29,9 @@ public class AssessmentItemManagementService {
 		assessmentItemManagementCheckService.deleteAssessmentItemByAsIdRequestCheck();
 		assessmentItemManagementBusinessService.deleteAssessmentItemByAsIdRequestProcess();
     }
+
+    public void getAssessmentItemWithCountByAsIdRequest() {
+		assessmentItemManagementCheckService.getAssessmentItemWithCountByAsIdRequestCheck();
+		assessmentItemManagementBusinessService.getAssessmentItemWithCountByAsIdRequestProcess();
+    }
 }

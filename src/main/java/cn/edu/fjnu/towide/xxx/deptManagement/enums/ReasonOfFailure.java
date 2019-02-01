@@ -6,6 +6,8 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 
 	NAME_IS_EMPTY("The parameters submitted are incorrect", "名称不能为空"),
 	WEIGHT_SHOULD_OVER_ZERO("The weight should over zero", "权重填写的应该是一个大于0的值"),
+	ASSESSMENT_ITEM_SHOULD_OVER_ZERO("the assessment item should over zero", "请为部门至少添加一个考核项"),
+
 	DELETE_IS_FAILURE("delete_is_failure","删除失败"),
 	INSERT_IS_FAILURE("insert_is_failure", "插入失败");//此处添加枚举值
 
