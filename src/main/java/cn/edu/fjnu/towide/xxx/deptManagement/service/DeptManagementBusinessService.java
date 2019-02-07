@@ -52,10 +52,8 @@ public class DeptManagementBusinessService {
     public void addDeptRequestProcess() {
         Department department = dataCenterService.getData("department");
         boolean res = departmentDao.AddDepartment(department);
-        ResponseData responseData = dataCenterService.getResponseDataFromDataLocal();
         if (!res) {
-            ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.INSERT_IS_FAILURE);
-            return;
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.INSERT_IS_FAILURE);
         }
         List<AssessmentItemVo> assessmentItems = dataCenterService.getData("assessmentItems");
         String deptId = department.getId();
@@ -67,7 +65,7 @@ public class DeptManagementBusinessService {
         departmentDao.DeleteAssessmentItemByDepartmentId(deptId);
         Boolean res2 = departmentDao.InsertAssessmentItems(assessmentItems, deptId);
         if (!res2) {
-            ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.INSERT_IS_FAILURE);
+            ExceptionUtil.setFailureMsgAndThrow( ReasonOfFailure.INSERT_IS_FAILURE);
             return;
         }
         setReturnDataOfSuccess();

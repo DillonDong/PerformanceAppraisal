@@ -52,18 +52,15 @@ public class AssessmentItemManagementBusinessService {
         List<CountVo> count = dataCenterService.getData("count");
 
         boolean res = assessmentItemDao.AddAssessmentItem(assessmentItem);
-        ResponseData responseData = dataCenterService.getResponseDataFromDataLocal();
         if (!res){
-            ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.INSERT_IS_FAILURE);
-            return;
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.INSERT_IS_FAILURE);
         }
 
         assessmentItemDao.DeleteCountByAsId(assessmentItem.getId());
 
         Boolean res2 = assessmentItemDao.InsertAssessmentItemCount(count,assessmentItem.getId());
         if (!res2) {
-            ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.INSERT_IS_FAILURE);
-            return;
+            ExceptionUtil.setFailureMsgAndThrow( ReasonOfFailure.INSERT_IS_FAILURE);
         }
         setReturnDataOfSuccess();
 
