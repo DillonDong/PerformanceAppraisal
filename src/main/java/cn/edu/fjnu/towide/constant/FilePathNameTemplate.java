@@ -4,7 +4,7 @@ public interface FilePathNameTemplate {
 
 	String fontFileLocalPath = "/product/PerformanceAppraisal/files/font/";//中文字体的本地路径前缀
 
-	String uploadFileLocalPath = "/product/PerformanceAppraisal/files/upload/";//上传时本地路径前缀
+	String uploadFileLocalPath = "/root/picture/PerformanceAppraisal/";//上传时本地路径前缀
 
 	String uploadFileWebPath = "http://s.gao.willim.top/GAO-file/upload/";//网络路径前缀
 

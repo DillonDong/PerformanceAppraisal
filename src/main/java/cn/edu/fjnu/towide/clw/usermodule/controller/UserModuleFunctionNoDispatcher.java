@@ -51,6 +51,12 @@ public class UserModuleFunctionNoDispatcher {
             case UserModuleFunctionNoConstants.ADD_EXAMINATION_ITEMS:
                 userModuleService.addExaminationItemsRequestProcess();
                 break;
+            case UserModuleFunctionNoConstants.DELETE_USER:
+                userModuleService.deleteUserRequestProcess();
+                break;
+            case UserModuleFunctionNoConstants.UPDATE_EXAMINATION_ITEMS:
+                userModuleService.updateExaminationItemsRequestProcess();
+                break;
             default:
                 ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.FUNCTION_NO_ARE_INCORRECT);
                 break;

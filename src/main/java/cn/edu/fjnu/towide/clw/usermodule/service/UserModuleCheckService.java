@@ -144,17 +144,26 @@ public class UserModuleCheckService {
      * @Description: 添加绩效
      */
     public void addExaminationItemsRequestCheck() {
-        JSONArray examinationItems = dataCenterService
-                .getParamValueFromParamOfRequestParamJsonByParamName("examinationItemsList");
-        if(examinationItems==null||examinationItems.size()==0) {
-            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.EXAMINATION_ITEMS_EMPTY);
-            return;
-        }
 
-        for(int i=0;i<examinationItems.size();i++){
-            String examinationItemId=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getString("examinationItemId");
-            Double value=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getDouble("value");
-        }
 
+    }
+
+    /**
+     * @Description: 更新绩效
+     */
+    public void updateExaminationItemsRequestCheck() {
+
+
+    }
+
+    /**
+     * @Description: 删除用户
+     */
+    public void deleteUserRequestCheck() {
+        String username = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("username");
+        if (CheckVariableUtil.stringVariableIsEmpty(username)) {
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.USER_NAME_IS_EMPTY);
+        }
+        dataCenterService.setData("username", username);
     }
 }

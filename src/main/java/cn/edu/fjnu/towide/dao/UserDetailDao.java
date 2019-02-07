@@ -1,10 +1,7 @@
 package cn.edu.fjnu.towide.dao;
 
 import cn.edu.fjnu.towide.entity.*;
-import cn.edu.fjnu.towide.vo.CountVo;
-import cn.edu.fjnu.towide.vo.DeptAsVo;
-import cn.edu.fjnu.towide.vo.UserDetailInfoVo;
-import cn.edu.fjnu.towide.vo.UserInfoVo;
+import cn.edu.fjnu.towide.vo.*;
 import org.apache.ibatis.annotations.*;
 
 import org.springframework.stereotype.Repository;
@@ -80,10 +77,11 @@ public interface UserDetailDao {
     /**
      * @Description: 获取用户信息列表
      */
-    @Select("<script>"+"SELECT username,real_name,remarks,base_salary,code,d.name "
+    @Select("<script>"+"SELECT u.username,real_name,remarks,base_salary,code,d.name "
             + "FROM user_details as u "
             + "LEFT JOIN department as d ON u.dept_id=d.id "
-            + "WHERE 1=1 "
+            + "LEFT JOIN users ON u.username=users.username "
+            + "WHERE users.enabled=1 "
             + "<if test=\"keyword!=null and keyword!=\'\' \"> "
             + "AND real_name like concat('%', #{keyword}, '%') "+ "</if> "
             +"</script>"
@@ -110,26 +108,50 @@ public interface UserDetailDao {
     boolean updateUserDetailedInfo(UserDetailInfoVo p);
 
 
+    /**
+     * @Description: 删除用户薪资
+     */
+    @Update("UPDATE users SET enabled=0 "
+            +"WHERE username=#{username}")
+    boolean deleteUser(@Param("username")String username);
+
 
 
     /**
      * @Description: 找大于此水平的分数
      */
-    @Select("SELECT min(level),min(count) "
+    @Select("<script>"+"SELECT min(level) as level,min(count) as count "
             + "FROM count "
-            + "WHERE level>=#{value} and as_id=#{itemId}"
+            + "WHERE level <![CDATA[  >=  ]]> #{value} and as_id=#{itemId}"+"</script>"
     )
     CountVo getBiggerCount(@Param("itemId")String itemId, @Param("value")Double value);
 
+    /**
+     * @Description: 找最大的分数
+     */
+    @Select("SELECT max(level) as level,max(count) as count "
+            + "FROM count "
+            + "WHERE as_id=#{itemId}"
+    )
+    CountVo getBiggestCount(@Param("itemId")String itemId);
 
     /**
      * @Description: 找小于此水平的分数
      */
-    @Select("SELECT max(level),max(count) "
+    @Select("<script>"+"SELECT max(level) as level,max(count) as count "
             + "FROM count "
-            + "WHERE level<=#{value} and as_id=#{itemId}"
+            + "WHERE level &lt; #{value} and as_id=#{itemId}"+"</script>"
     )
     CountVo getSmallerCount(@Param("itemId")String itemId, @Param("value")Double value);
+
+    /**
+     * @Description: 找最小的分数
+     */
+    @Select("SELECT min(level) as level,min(count) as count "
+            + "FROM count "
+            + "WHERE as_id=#{itemId}"
+    )
+    CountVo getSmallestCount(@Param("itemId")String itemId);
 
 
     /**
@@ -153,11 +175,11 @@ public interface UserDetailDao {
     /**
      * @Description:
      */
-    @Select("SELECT dept_id "
+    @Select("SELECT dept_id,base_salary "
             + "FROM user_details "
             + "WHERE username=#{username}"
     )
-    String getDeptIdByUserName(String username);
+    DeptSalaryVo getDeptSalaryByUserName(String username);
 
     /**
      * @Description: 获取部门考核项列表
@@ -168,6 +190,18 @@ public interface UserDetailDao {
     )
     List<DeptAsVo> getDeptAssessmentList(String dept_id);
 
+    /**
+     * @Description: 获取参数表
+     */
+    @Select("SELECT * FROM parameter ")
+    Parameter getParameter();
+
+    /**
+     * @Description: 存储用户薪资信息
+     */
+    @Insert("REPLACE INTO user_wages VALUES(" +
+            "#{id},#{userId},#{turnover},#{totalScore},#{meritsPay},#{percentage},#{totalWages},#{time},#{examine})")
+    boolean addUserWages(UserWages userWages);
     // @Insert("REPLACE user_details(username,phone,email,gender,nickname,birthday,last_update_time) VALUES (#{username},#{phone},#{email},#{sex},#{nickname},#{birthday},#{updateTime})")
     // boolean updateUserInformation(UserDetails userDetails);
 

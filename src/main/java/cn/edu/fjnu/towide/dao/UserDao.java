@@ -42,7 +42,9 @@ public interface UserDao {
 	@Update("UPDATE users SET password=#{passwordNew} WHERE username=#{username}")
 	boolean updatePasswordForUsers(@Param("passwordNew") String passwordNew, @Param("username") String username);
 
-
+	//查重
+	@Select("SELECT COUNT(1) FROM user_wages WHERE user_id=#{username} and time=#{time}")
+	boolean isTimeExist(@Param("username") String username, @Param("time") String time);
 
 
 	/*用户注册*/
@@ -66,6 +68,11 @@ public interface UserDao {
 	 */
 	@Insert("REPLACE INTO users (username,password,enabled) VALUES (#{username},#{password},#{enabled})")
 	boolean addUsers(User user);
+
+
+	@Insert("REPLACE INTO authorities(username) "
+			+"VALUES (#{username})")
+	boolean addAuthorities(String username);
 
 	/**
 	 *  前台添加用户信息user_details   如果已存在则更新

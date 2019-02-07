@@ -4,9 +4,7 @@ import cn.edu.fjnu.towide.dao.UserDetailDao;
 import cn.edu.fjnu.towide.entity.*;
 import cn.edu.fjnu.towide.util.CheckVariableUtil;
 import cn.edu.fjnu.towide.util.IdGenerator;
-import cn.edu.fjnu.towide.vo.CountVo;
-import cn.edu.fjnu.towide.vo.DeptAsVo;
-import cn.edu.fjnu.towide.vo.UserDetailInfoVo;
+import cn.edu.fjnu.towide.vo.*;
 import cn.edu.fjnu.towide.xxx.fileupload.constant.LogConstant;
 import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
@@ -25,8 +23,9 @@ import cn.edu.fjnu.towide.dao.UserDao;
 import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.ExceptionUtil;
 import cn.edu.fjnu.towide.util.ResponseDataUtil;
-import cn.edu.fjnu.towide.vo.UserInfoVo;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -161,8 +160,8 @@ public class UserModuleBusinessService {
 	public void getUserDetailedInfoRequestProcess() {
 		String username = dataCenterService.getData("username");
 		UserDetailInfoVo userDetailInfo=userDetailDao.getUserDetailedInfoList(username);
-		userDetailInfo.setIdPre(uploadFileLocalPath +userDetailInfo.getIdPre());
-		userDetailInfo.setIdAfter(uploadFileLocalPath +userDetailInfo.getIdAfter());
+		userDetailInfo.setIdPre("PerformanceAppraisal/" +userDetailInfo.getIdPre());
+		userDetailInfo.setIdAfter("PerformanceAppraisal/" +userDetailInfo.getIdAfter());
 		responseUtil("userDetailInfo",userDetailInfo);
 	}
 
@@ -170,6 +169,7 @@ public class UserModuleBusinessService {
 	/**
 	 * @Description: 添加绩效
 	 */
+	@Transactional
 	public void addExaminationItemsRequestProcess() {
 		JSONArray examinationItems = dataCenterService
 				.getParamValueFromParamOfRequestParamJsonByParamName("examinationItemsList");
@@ -183,6 +183,11 @@ public class UserModuleBusinessService {
 		String time=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(0))).getString("value");
 		//数组第二个为营业额
 		Double turnover=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(1))).getDouble("value");
+		boolean istimeExist=userDao.isTimeExist(username,time);
+		if(istimeExist){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.EXAMINATION_ITEMS_IS_EXIST);
+			return;
+		}
 
 		Map<String,Double> countMap=new HashMap<>();
 		for(int i=2;i<examinationItems.size();i++){
@@ -190,10 +195,25 @@ public class UserModuleBusinessService {
 			Double value=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getDouble("value");
 			CountVo bigger=userDetailDao.getBiggerCount(examinationItemId,value);
 			CountVo smaller=userDetailDao.getSmallerCount(examinationItemId,value);
-			//计算比例
-			double bili=(bigger.getLevel()-smaller.getLevel()) / (bigger.getCount()-smaller.getCount());
-			//计算分数
-			double count=(value-smaller.getLevel()) / bili+smaller.getCount();
+
+			CountVo biggest=userDetailDao.getBiggestCount(examinationItemId);
+			CountVo smallest=userDetailDao.getSmallestCount(examinationItemId);
+			double count=0;
+			if(bigger==null ||smaller==null){
+				if(value>biggest.getLevel()){
+					count=biggest.getCount();
+				}
+				if(value<=smallest.getLevel()){
+					count=smallest.getCount();
+				}
+
+			}else{
+				//计算比例
+				double bili=(bigger.getLevel()-smaller.getLevel()) / (bigger.getCount()-smaller.getCount());
+				//计算分数
+				count=(value-smaller.getLevel()) / bili+smaller.getCount();
+			}
+
 			//把考核项目和分数放到map中
 			countMap.put(examinationItemId,count);
 			//把考核项目和分数存到user_assessment表中
@@ -202,6 +222,8 @@ public class UserModuleBusinessService {
 			userAssessment.setTime(time);
 			String assessmentItemName=userDetailDao.getAssessmentItemName(examinationItemId);
 			userAssessment.setAssessmentItem(assessmentItemName);
+			BigDecimal b = new BigDecimal(count);
+			count = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 			userAssessment.setCount(count);
 
 			userAssessment.setUserId(username);
@@ -211,20 +233,222 @@ public class UserModuleBusinessService {
 				return;
 			}
 		}
-		String deptId=userDetailDao.getDeptIdByUserName(username);
+		//得到部门和薪水
+		DeptSalaryVo deptSalaryVo=userDetailDao.getDeptSalaryByUserName(username);
 
-		List<DeptAsVo> assessmentList=userDetailDao.getDeptAssessmentList(deptId);
+		List<DeptAsVo> assessmentList=userDetailDao.getDeptAssessmentList(deptSalaryVo.getDeptId());
+		//计算总分
 		double totalCount=0;
 		for (Map.Entry<String, Double> myItems : countMap.entrySet()) {
 			for (DeptAsVo deptAsVo : assessmentList) {
 				if(myItems.getKey().equals(deptAsVo.getAsId())){
-
+					totalCount += (myItems.getValue()*deptAsVo.getWeight()*0.01);
 				}
 			}
 		}
 
+		//
+		Parameter parameter=userDetailDao.getParameter();
+		//计算绩效奖
+		double meritsPay=0;
+		if(totalCount>=parameter.getJxqjLeft() && totalCount<=parameter.getJxqjRight()){
+			double bili1=(parameter.getJxqjRight()-parameter.getJxqjLeft()) / (100 - parameter.getJxblLeft());
+			//计算正比递增的比例
+			double jxbili=(totalCount-parameter.getJxqjLeft()) / bili1+parameter.getJxblLeft();
+			meritsPay=parameter.getMeritsPay()*jxbili*0.01;
+		}else if (totalCount > parameter.getJxqjRight()){
+			//大于右区间则拿到全部的绩效奖
+			meritsPay=parameter.getMeritsPay();
+		}
+
+		// 计算抽成
+		double percentage=0;
+		//营业额抽成金额
+		double turnoverPercentage=(turnover-parameter.getMinimumTurnover())*0.01;
+		//
+		if(totalCount>=parameter.getCcqjLeft() && totalCount<=parameter.getCcqjMiddle()){
+			double bili2=(parameter.getCcqjMiddle()-parameter.getCcqjLeft()) / (parameter.getCcqjzzRight() - parameter.getCcqjzzLeft());
+			//计算左中正比递增的比例
+			double ccbili1=(totalCount-parameter.getCcqjLeft()) / bili2 + parameter.getCcqjzzLeft();
+			percentage=turnoverPercentage*ccbili1*0.01;
+		}else if (totalCount>parameter.getCcqjMiddle() && totalCount<=parameter.getCcqjRight()){
+			double bili3=(parameter.getCcqjRight()-parameter.getCcqjMiddle()) / (parameter.getCcqjzyRight() - parameter.getCcqjzyLeft());
+			//计算中右正比递增的比例
+			double ccbili2=(totalCount-parameter.getCcqjMiddle()) / bili3 + parameter.getCcqjzyLeft();
+			percentage=turnoverPercentage*ccbili2*0.01;
+		}
+		//总工资
+		double total_wages=deptSalaryVo.getBaseSalary()+meritsPay+percentage;
+		BigDecimal b = new BigDecimal(turnover);
+		turnover = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		BigDecimal e = new BigDecimal(totalCount);
+		totalCount = e.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		BigDecimal c = new BigDecimal(meritsPay);
+		meritsPay = c.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		BigDecimal f = new BigDecimal(percentage);
+		percentage = f.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		BigDecimal d = new BigDecimal(total_wages);
+		total_wages = d.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		UserWages userWages=new UserWages();
+		userWages.setId(IdGenerator.getId());
+		userWages.setUserId(username);
+		userWages.setTurnover(turnover);
+		userWages.setTotalScore(totalCount);
+		userWages.setMeritsPay(meritsPay);
+		userWages.setPercentage(percentage);
+		userWages.setTotalWages(total_wages);
+		userWages.setTime(time);
+		userWages.setExamine(0);
+		boolean addIsSuccess=userDetailDao.addUserWages(userWages);
+		if(!addIsSuccess){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.ADD_WAGE_WRONG);
+			return;
+		}
+
+		responseUtil(null,null);
 	}
 
+	/**
+	 * @Description: 更新绩效
+	 */
+	@Transactional
+	public void updateExaminationItemsRequestProcess() {
+		JSONArray examinationItems = dataCenterService
+				.getParamValueFromParamOfRequestParamJsonByParamName("examinationItemsList");
+		if(examinationItems==null||examinationItems.size()==0) {
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.EXAMINATION_ITEMS_EMPTY);
+			return;
+		}
+		User currentLoginUser = dataCenterService.getCurrentLoginUserFromDataLocal();
+		String username = currentLoginUser.getUsername();
+		//数组第一个为时间
+		String time=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(0))).getString("value");
+		//数组第二个为营业额
+		Double turnover=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(1))).getDouble("value");
+
+
+		Map<String,Double> countMap=new HashMap<>();
+		for(int i=2;i<examinationItems.size();i++){
+			String examinationItemId=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getString("examinationItemId");
+			Double value=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getDouble("value");
+			CountVo bigger=userDetailDao.getBiggerCount(examinationItemId,value);
+			CountVo smaller=userDetailDao.getSmallerCount(examinationItemId,value);
+
+			CountVo biggest=userDetailDao.getBiggestCount(examinationItemId);
+			CountVo smallest=userDetailDao.getSmallestCount(examinationItemId);
+			double count=0;
+			if(bigger==null ||smaller==null){
+				if(value>biggest.getLevel()){
+					count=biggest.getCount();
+				}
+				if(value<=smallest.getLevel()){
+					count=smallest.getCount();
+				}
+
+			}else{
+				//计算比例
+				double bili=(bigger.getLevel()-smaller.getLevel()) / (bigger.getCount()-smaller.getCount());
+				//计算分数
+				count=(value-smaller.getLevel()) / bili+smaller.getCount();
+			}
+
+			//把考核项目和分数放到map中
+			countMap.put(examinationItemId,count);
+			//把考核项目和分数存到user_assessment表中
+			UserAssessment userAssessment=new UserAssessment();
+			userAssessment.setId(IdGenerator.getId());
+			userAssessment.setTime(time);
+			String assessmentItemName=userDetailDao.getAssessmentItemName(examinationItemId);
+			userAssessment.setAssessmentItem(assessmentItemName);
+			BigDecimal b = new BigDecimal(count);
+			count = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			userAssessment.setCount(count);
+
+			userAssessment.setUserId(username);
+			//先删除在添加
+			boolean deleteExaminationItemsSuccess=userDetailDao.deleteUserExaminationItems(username,time);
+			boolean addSuccess=userDetailDao.addAssessmentItemAndCount(userAssessment);
+			if(!addSuccess|| !deleteExaminationItemsSuccess){
+				ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.UPDATE_EXAMINATION_ITEMS_WRONG);
+				return;
+			}
+		}
+		//得到部门和薪水
+		DeptSalaryVo deptSalaryVo=userDetailDao.getDeptSalaryByUserName(username);
+
+		List<DeptAsVo> assessmentList=userDetailDao.getDeptAssessmentList(deptSalaryVo.getDeptId());
+		//计算总分
+		double totalCount=0;
+		for (Map.Entry<String, Double> myItems : countMap.entrySet()) {
+			for (DeptAsVo deptAsVo : assessmentList) {
+				if(myItems.getKey().equals(deptAsVo.getAsId())){
+					totalCount += (myItems.getValue()*deptAsVo.getWeight()*0.01);
+				}
+			}
+		}
+
+		//
+		Parameter parameter=userDetailDao.getParameter();
+		//计算绩效奖
+		double meritsPay=0;
+		if(totalCount>=parameter.getJxqjLeft() && totalCount<=parameter.getJxqjRight()){
+			double bili1=(parameter.getJxqjRight()-parameter.getJxqjLeft()) / (100 - parameter.getJxblLeft());
+			//计算正比递增的比例
+			double jxbili=(totalCount-parameter.getJxqjLeft()) / bili1+parameter.getJxblLeft();
+			meritsPay=parameter.getMeritsPay()*jxbili*0.01;
+		}else if (totalCount > parameter.getJxqjRight()){
+			//大于右区间则拿到全部的绩效奖
+			meritsPay=parameter.getMeritsPay();
+		}
+
+		// 计算抽成
+		double percentage=0;
+		//营业额抽成金额
+		double turnoverPercentage=(turnover-parameter.getMinimumTurnover())*0.01;
+		//
+		if(totalCount>=parameter.getCcqjLeft() && totalCount<=parameter.getCcqjMiddle()){
+			double bili2=(parameter.getCcqjMiddle()-parameter.getCcqjLeft()) / (parameter.getCcqjzzRight() - parameter.getCcqjzzLeft());
+			//计算左中正比递增的比例
+			double ccbili1=(totalCount-parameter.getCcqjLeft()) / bili2 + parameter.getCcqjzzLeft();
+			percentage=turnoverPercentage*ccbili1*0.01;
+		}else if (totalCount>parameter.getCcqjMiddle() && totalCount<=parameter.getCcqjRight()){
+			double bili3=(parameter.getCcqjRight()-parameter.getCcqjMiddle()) / (parameter.getCcqjzyRight() - parameter.getCcqjzyLeft());
+			//计算中右正比递增的比例
+			double ccbili2=(totalCount-parameter.getCcqjMiddle()) / bili3 + parameter.getCcqjzyLeft();
+			percentage=turnoverPercentage*ccbili2*0.01;
+		}
+		//总工资
+		double total_wages=deptSalaryVo.getBaseSalary()+meritsPay+percentage;
+		BigDecimal b = new BigDecimal(turnover);
+		turnover = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		BigDecimal e = new BigDecimal(totalCount);
+		totalCount = e.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		BigDecimal c = new BigDecimal(meritsPay);
+		meritsPay = c.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		BigDecimal f = new BigDecimal(percentage);
+		percentage = f.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		BigDecimal d = new BigDecimal(total_wages);
+		total_wages = d.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		UserWages userWages=new UserWages();
+		userWages.setId(IdGenerator.getId());
+		userWages.setUserId(username);
+		userWages.setTurnover(turnover);
+		userWages.setTotalScore(totalCount);
+		userWages.setMeritsPay(meritsPay);
+		userWages.setPercentage(percentage);
+		userWages.setTotalWages(total_wages);
+		userWages.setTime(time);
+		userWages.setExamine(0);
+		//先删除在添加
+		boolean deleteUserSalaryIsSuccess=userDetailDao.deleteUserSalaryInfo(username,time);
+		boolean addIsSuccess=userDetailDao.addUserWages(userWages);
+		if(!addIsSuccess|| !deleteUserSalaryIsSuccess){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.ADD_WAGE_WRONG);
+			return;
+		}
+
+		responseUtil(null,null);
+	}
 
 	/**
 	 * @Description: 更新用户详细信息
@@ -234,6 +458,19 @@ public class UserModuleBusinessService {
 		boolean updateUserDetailResult =userDetailDao.updateUserDetailedInfo(userDetailInfo);
 		if (!updateUserDetailResult) {
 			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.UPDATE_ERROR);
+			return;
+		}
+		responseUtil(null,null);
+	}
+
+	/**
+	 * @Description: 删除用户
+	 */
+	public void deleteUserRequestProcess() {
+		String username = dataCenterService.getData("username");
+		boolean deleteUser =userDetailDao.deleteUser(username);
+		if (!deleteUser) {
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.DELETE_ERROR);
 			return;
 		}
 		responseUtil(null,null);

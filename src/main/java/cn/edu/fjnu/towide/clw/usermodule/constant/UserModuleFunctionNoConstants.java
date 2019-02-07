@@ -13,6 +13,10 @@ public interface UserModuleFunctionNoConstants {
 	String UPDATE_USER_DETAILED_INFO = "UpdateUserDetailedInfo";//更新用户详细信息
 
     String ADD_EXAMINATION_ITEMS = "AddExaminationItems";  //添加绩效
+	String UPDATE_EXAMINATION_ITEMS = "UpdateExaminationItems";  //更新绩效
+
+	String DELETE_USER = "DeleteUser";  //删除用户
+
 
 
 }

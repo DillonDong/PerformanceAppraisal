@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class CountVo {
 
-    private double level;
-    private double count;
+    private Double level;
+    private Double count;
 
 }

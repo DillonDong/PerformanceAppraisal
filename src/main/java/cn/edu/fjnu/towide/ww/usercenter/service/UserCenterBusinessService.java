@@ -266,7 +266,9 @@ public class UserCenterBusinessService {
         userDetails.setUpdateTime(new Date());
         boolean addResult2 = userDao.addUserDetails(userDetails);
 
-        if (!addResult1 || !addResult2 ) {
+        boolean addResult3 = userDao.addAuthorities(username);
+
+        if (!addResult1 || !addResult2 || !addResult3) {
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.USER_REGISTRATION_ERROR);
         }
 

@@ -85,4 +85,21 @@ public class UserModuleService {
 		userModuleCheckService.addExaminationItemsRequestCheck();
 		userModuleBusinessService.addExaminationItemsRequestProcess();
 	}
+
+	/**
+	 * @Description: 更新绩效
+	 */
+	public void updateExaminationItemsRequestProcess() {
+		userModuleCheckService.updateExaminationItemsRequestCheck();
+		userModuleBusinessService.updateExaminationItemsRequestProcess();
+	}
+
+
+	/**
+	 * @Description: 删除用户
+	 */
+	public void deleteUserRequestProcess() {
+		userModuleCheckService.deleteUserRequestCheck();
+		userModuleBusinessService.deleteUserRequestProcess();
+	}
 }
