@@ -5,6 +5,7 @@ import cn.edu.fjnu.towide.enums.IReasonOfFailure;
 public enum ReasonOfFailure implements IReasonOfFailure{
 
 	NAME_IS_EMPTY("The parameters submitted are incorrect", "名称不能为空"),
+	NAME_IS_REPEAT("The parameters submitted are incorrect", "部门名称已经存在"),
 	WEIGHT_SHOULD_OVER_ZERO("The weight should over zero", "权重填写的应该是一个大于0的值"),
 	ASSESSMENT_ITEM_SHOULD_OVER_ZERO("the assessment item should over zero", "请为部门至少添加一个考核项"),
 

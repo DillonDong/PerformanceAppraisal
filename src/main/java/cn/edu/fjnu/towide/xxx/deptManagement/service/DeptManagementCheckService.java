@@ -1,5 +1,6 @@
 package cn.edu.fjnu.towide.xxx.deptManagement.service;
 
+import cn.edu.fjnu.towide.dao.DepartmentDao;
 import cn.edu.fjnu.towide.entity.Department;
 import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.CheckVariableUtil;
@@ -21,6 +22,9 @@ public class DeptManagementCheckService {
     DataCenterService dataCenterService;
 
 
+	@Autowired
+    private DepartmentDao departmentDao;
+
     public void addDeptRequestCheck() {
         JSONObject jsonObject = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("dept");
 
@@ -34,6 +38,11 @@ public class DeptManagementCheckService {
 
         if (CheckVariableUtil.stringVariableIsEmpty(department.getId())){
             department.setId(IdGenerator.getId());
+        }
+
+        String name = department.getName();
+        if (departmentDao.CheckDeptName(name.trim())>0){
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.NAME_IS_REPEAT);
         }
 
         JSONArray jsonArray =dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("assessmentItems");
