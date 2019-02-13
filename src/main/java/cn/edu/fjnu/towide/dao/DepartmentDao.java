@@ -71,4 +71,7 @@ public interface DepartmentDao {
             +   "</foreach>"
             + "</script>")
     Boolean DeleteDepartmentByDeptId(@Param("deptId") List<String> deptId);
+
+    @Select("SELECT Count(*) FROM department WHERE name = #{name}")
+    Long CheckDeptName(String name);
 }

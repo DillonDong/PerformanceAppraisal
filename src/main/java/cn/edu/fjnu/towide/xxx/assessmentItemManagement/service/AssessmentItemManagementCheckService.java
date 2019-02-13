@@ -37,6 +37,11 @@ public class AssessmentItemManagementCheckService {
         if (CheckVariableUtil.stringVariableIsEmpty(assessmentItem.getId())){
             assessmentItem.setId(IdGenerator.getId());
         }
+        String name = assessmentItem.getName();
+        if (assessmentItemDao.CheckAssessmentItemName(name.trim())>0){
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.NAME_IS_REPEAT);
+        }
+
 
         JSONArray jsonArray =dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("count");
 
