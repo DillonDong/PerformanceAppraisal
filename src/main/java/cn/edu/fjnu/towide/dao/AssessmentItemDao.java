@@ -66,6 +66,6 @@ public interface AssessmentItemDao {
     @Select("SELECT * FROM assessment_item WHERE id = #{asId}")
     AssessmentItem GetAssessmentItemByAsId(String asId);
 
-    @Select("SELECT Count(*) FROM assessment_item WHERE name = #{name}")
-    Long CheckAssessmentItemName(String name);
+    @Select("SELECT Count(*) FROM assessment_item WHERE name = #{name} AND id!=#{id}")
+    Long CheckAssessmentItemName(AssessmentItem assessmentItem);
 }

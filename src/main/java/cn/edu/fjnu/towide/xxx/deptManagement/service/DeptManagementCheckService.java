@@ -40,8 +40,8 @@ public class DeptManagementCheckService {
             department.setId(IdGenerator.getId());
         }
 
-        String name = department.getName();
-        if (departmentDao.CheckDeptName(name.trim())>0){
+
+        if (departmentDao.CheckDeptName(department)>0){
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.NAME_IS_REPEAT);
         }
 
