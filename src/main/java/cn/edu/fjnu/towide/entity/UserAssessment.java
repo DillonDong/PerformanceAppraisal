@@ -1,6 +1,8 @@
 package cn.edu.fjnu.towide.entity;
 
+import lombok.Data;
 
+@Data
 public class UserAssessment {
 
   private String id;
@@ -8,7 +10,7 @@ public class UserAssessment {
   private String assessmentItem;
   private double count;
   private String time;
-
+  private double level;
 
   public String getId() {
     return id;

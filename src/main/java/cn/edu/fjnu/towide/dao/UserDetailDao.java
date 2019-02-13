@@ -49,6 +49,24 @@ public interface UserDetailDao {
     List<AssessmentItem> getUserExaminationItemsInAdd(String userName);
 
 
+    /**
+     *  是否已审核薪资
+     */
+    @Select("SELECT examine "
+            + "FROM user_wages "
+            + "WHERE user_id=#{userName} and time=#{time}"
+    )
+    boolean isExamine(@Param("userName")String userName , @Param("time")String time);
+
+
+    /**
+     * @Description: 审核薪资
+     */
+    @Update("UPDATE user_wages SET examine=1 "
+            + "WHERE user_id=#{userName} and time=#{time}")
+    boolean examineSalary(@Param("userName")String userName , @Param("time")String time);
+
+
 
     /**
      *  在详情中获取用户项目考核
@@ -98,6 +116,18 @@ public interface UserDetailDao {
     )
     UserDetailInfoVo getUserDetailedInfoList(String username);
 
+
+    /**
+     * @Description: 根据时间范围获得考核项柱形图数据
+     */
+    @Select("SELECT time,count "
+            + "FROM user_assessment as u "
+            + "WHERE user_id=#{username} and assessment_item=#{examinationItem} "
+            + "and time>=#{startTime} and time<=#{endTime}"
+            + "order by time ASC "
+    )
+    List<GraphVo> getGraphData(@Param("startTime") String startTime, @Param("endTime") String endTime,
+                              @Param("username")String username, @Param("examinationItem")String examinationItem);
 
     /**
      * @Description: 更新用户详细信息
@@ -168,7 +198,7 @@ public interface UserDetailDao {
      * @Description: 保存用户考核项
      */
     @Insert("REPLACE INTO user_assessment VALUES(" +
-            "#{id},#{userId},#{assessmentItem},#{count},#{time})")
+            "#{id},#{userId},#{assessmentItem},#{count},#{time},#{level})")
     boolean addAssessmentItemAndCount(UserAssessment userAssessment);
 
 

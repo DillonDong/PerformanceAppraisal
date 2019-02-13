@@ -39,9 +39,7 @@ public class UserModuleFunctionNoDispatcher {
             case UserModuleFunctionNoConstants.DELETE_EXAMINATION_ITEMS:
                 userModuleService.deleteExaminationItemsRequestProcess();
                 break;
-            case UserModuleFunctionNoConstants.GET_USER_INFO_LIST:
-                userModuleService.getUserInfoListRequestProcess();
-                break;
+
             case UserModuleFunctionNoConstants.GET_USER_DETAILED_INFO:
                 userModuleService.getUserDetailedInfoRequestProcess();
                 break;
@@ -51,11 +49,12 @@ public class UserModuleFunctionNoDispatcher {
             case UserModuleFunctionNoConstants.ADD_EXAMINATION_ITEMS:
                 userModuleService.addExaminationItemsRequestProcess();
                 break;
-            case UserModuleFunctionNoConstants.DELETE_USER:
-                userModuleService.deleteUserRequestProcess();
-                break;
+
             case UserModuleFunctionNoConstants.UPDATE_EXAMINATION_ITEMS:
                 userModuleService.updateExaminationItemsRequestProcess();
+                break;
+            case UserModuleFunctionNoConstants.GET_GRAPH_DATA:
+                userModuleService.getGraphDataRequestProcess();
                 break;
             default:
                 ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.FUNCTION_NO_ARE_INCORRECT);

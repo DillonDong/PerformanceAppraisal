@@ -1,39 +1,31 @@
-package cn.edu.fjnu.towide.clw.usermodule.service;
+package cn.edu.fjnu.towide.ws.deleteUser.service;
 
+import cn.edu.fjnu.towide.dao.AuthoritiesDao;
+import cn.edu.fjnu.towide.dao.UserDao;
 import cn.edu.fjnu.towide.dao.UserDetailDao;
 import cn.edu.fjnu.towide.entity.*;
+import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.CheckVariableUtil;
+import cn.edu.fjnu.towide.util.ExceptionUtil;
 import cn.edu.fjnu.towide.util.IdGenerator;
+import cn.edu.fjnu.towide.util.ResponseDataUtil;
 import cn.edu.fjnu.towide.vo.*;
-import cn.edu.fjnu.towide.xxx.fileupload.constant.LogConstant;
+import cn.edu.fjnu.towide.ws.deleteUser.enums.ReasonOfFailure;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSONObject;
-
-import cn.edu.fjnu.towide.clw.usermodule.enums.ReasonOfFailure;
-import cn.edu.fjnu.towide.dao.AuthoritiesDao;
-import cn.edu.fjnu.towide.dao.UserDao;
-import cn.edu.fjnu.towide.service.DataCenterService;
-import cn.edu.fjnu.towide.util.ExceptionUtil;
-import cn.edu.fjnu.towide.util.ResponseDataUtil;
-
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static cn.edu.fjnu.towide.constant.FilePathNameTemplate.uploadFileLocalPath;
-
 @Service
-public class UserModuleBusinessService {
+public class DeleteUserBusinessService {
 	
 	@Autowired
 	DataCenterService dataCenterService;
@@ -225,7 +217,7 @@ public class UserModuleBusinessService {
 			BigDecimal b = new BigDecimal(count);
 			count = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 			userAssessment.setCount(count);
-            userAssessment.setLevel(value);
+
 			userAssessment.setUserId(username);
 			boolean addSuccess=userDetailDao.addAssessmentItemAndCount(userAssessment);
 			if(!addSuccess){
@@ -325,12 +317,8 @@ public class UserModuleBusinessService {
 		String time=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(0))).getString("value");
 		//数组第二个为营业额
 		Double turnover=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(1))).getDouble("value");
-        //先删除在添加
-        boolean deleteExaminationItemsSuccess=userDetailDao.deleteUserExaminationItems(username,time);
-        if(!deleteExaminationItemsSuccess){
-            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.UPDATE_EXAMINATION_ITEMS_WRONG);
-            return;
-        }
+
+
 		Map<String,Double> countMap=new HashMap<>();
 		for(int i=2;i<examinationItems.size();i++){
 			String examinationItemId=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getString("examinationItemId");
@@ -367,12 +355,12 @@ public class UserModuleBusinessService {
 			BigDecimal b = new BigDecimal(count);
 			count = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 			userAssessment.setCount(count);
-            userAssessment.setLevel(value);
 
 			userAssessment.setUserId(username);
 			//先删除在添加
+			boolean deleteExaminationItemsSuccess=userDetailDao.deleteUserExaminationItems(username,time);
 			boolean addSuccess=userDetailDao.addAssessmentItemAndCount(userAssessment);
-			if(!addSuccess){
+			if(!addSuccess|| !deleteExaminationItemsSuccess){
 				ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.UPDATE_EXAMINATION_ITEMS_WRONG);
 				return;
 			}
@@ -478,19 +466,5 @@ public class UserModuleBusinessService {
 			return;
 		}
 		responseUtil(null,null);
-	}
-
-
-	/**
-	 * @Description: 根据时间范围获得考核项柱形图数据
-	 */
-	public void getGraphDataRequestProcess() {
-		String examinationItem = dataCenterService.getData("examinationItem");
-		String username = dataCenterService.getData("username");
-		String startTime = dataCenterService.getData("startTime");
-		String endTime = dataCenterService.getData("endTime");
-		List<GraphVo> graphVoList=userDetailDao.getGraphData(startTime, endTime, username, examinationItem);
-
-		responseUtil("graphVoList",graphVoList);
 	}
 }

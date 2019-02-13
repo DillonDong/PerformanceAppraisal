@@ -17,6 +17,7 @@ public interface UserModuleFunctionNoConstants {
 
 	String DELETE_USER = "DeleteUser";  //删除用户
 
+	String GET_GRAPH_DATA = "GetGraphData";  //根据时间范围获得考核项柱形图数据
 
 
 }

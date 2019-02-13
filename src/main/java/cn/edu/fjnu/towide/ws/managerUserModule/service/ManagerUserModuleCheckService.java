@@ -1,25 +1,19 @@
-package cn.edu.fjnu.towide.clw.usermodule.service;
-
-import cn.edu.fjnu.towide.clw.usermodule.enums.ReasonOfFailure;
-import cn.edu.fjnu.towide.util.CheckVariableUtil;
-import cn.edu.fjnu.towide.util.ExceptionUtil;
-import cn.edu.fjnu.towide.vo.UserDetailInfoVo;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+package cn.edu.fjnu.towide.ws.managerUserModule.service;
 
 import cn.edu.fjnu.towide.dao.UserDao;
 import cn.edu.fjnu.towide.service.DataCenterService;
-
-import java.util.List;
-import java.util.Map;
+import cn.edu.fjnu.towide.util.CheckVariableUtil;
+import cn.edu.fjnu.towide.util.ExceptionUtil;
+import cn.edu.fjnu.towide.vo.UserDetailInfoVo;
+import cn.edu.fjnu.towide.ws.managerUserModule.enums.ReasonOfFailure;
+import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import static cn.edu.fjnu.towide.util.ExceptionUtil.throwRequestFailureException;
 
 @Service
-public class UserModuleCheckService {
+public class ManagerUserModuleCheckService {
 
     @Autowired
     DataCenterService dataCenterService;
@@ -169,26 +163,9 @@ public class UserModuleCheckService {
 
 
     /**
-     * @Description: 根据时间范围获得考核项柱形图数据
+     * @Description: 审核薪资
      */
-    public void getGraphDataRequestCheck() {
-        String examinationItem = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("examinationItem");
-        String username = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("username");
-        String startTime = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("startTime");
-        String endTime = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("endTime");
-
-        if (CheckVariableUtil.stringVariableIsEmpty(examinationItem)) {
-            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.EXAMINATION_ITEM_IS_EMPTY);
-        }
-        if (CheckVariableUtil.stringVariableIsEmpty(username)) {
-            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.USER_NAME_IS_EMPTY);
-        }
-        if (CheckVariableUtil.stringVariableIsEmpty(startTime)||CheckVariableUtil.stringVariableIsEmpty(endTime)) {
-            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.TIME_IS_EMPTY);
-        }
-        dataCenterService.setData("examinationItem", examinationItem);
-        dataCenterService.setData("username", username);
-        dataCenterService.setData("startTime", startTime);
-        dataCenterService.setData("endTime", endTime);
+    public void examineSalaryRequestCheck() {
+        checkTimeAndUsername();
     }
 }

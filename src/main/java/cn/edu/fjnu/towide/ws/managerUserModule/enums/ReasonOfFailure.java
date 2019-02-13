@@ -1,4 +1,4 @@
-package cn.edu.fjnu.towide.clw.usermodule.enums;
+package cn.edu.fjnu.towide.ws.managerUserModule.enums;
 
 import cn.edu.fjnu.towide.enums.IReasonOfFailure;
 
@@ -13,6 +13,9 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 	OPENID_IS_WRONG("The parameters submitted are incorrect", "OpenId错误"),
 	TIME_IS_EMPTY("The parameters submitted are incorrect", "时间不能为空"),
 	DELETE_IS_WRONG("The parameters submitted are incorrect", "删除失败"),
+	EXAMINED("The parameters submitted are incorrect", "已审核"),
+	EXAMINE_IS_WRONG("The parameters submitted are incorrect", "审核出错"),
+
 	PAGEINFO_ERROR("PageInfoError", "分页信息错误"),//此处添加枚举值
 	UPDATE_ERROR("update_error","更新对象出错"),
 	EXAMINATION_ITEMS_EMPTY("examination_items_empty","考核项为空"),
@@ -22,7 +25,6 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 	EXAMINATION_ITEMS_IS_EXIST("examination_items_is_exist","该月绩效考核已存在"),
 	UPDATE_EXAMINATION_ITEMS_WRONG("update_examination_items_wrong","更新绩效考核失败"),
 	UPDATE_WAGE_WRONG("update_wage_wrong","更新薪资失败"),
-	EXAMINATION_ITEM_IS_EMPTY("examination_item_is_empty", "考核项为空"),
 
 	USER_NAME_IS_EMPTY("The parameters submitted are incorrect", "用户名不能为空");//此处添加枚举值
 

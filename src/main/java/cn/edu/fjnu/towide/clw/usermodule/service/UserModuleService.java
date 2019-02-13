@@ -102,4 +102,12 @@ public class UserModuleService {
 		userModuleCheckService.deleteUserRequestCheck();
 		userModuleBusinessService.deleteUserRequestProcess();
 	}
+
+	/**
+	 * @Description: 根据时间范围获得考核项柱形图数据
+	 */
+	public void getGraphDataRequestProcess() {
+		userModuleCheckService.getGraphDataRequestCheck();
+		userModuleBusinessService.getGraphDataRequestProcess();
+	}
 }
