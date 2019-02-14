@@ -55,7 +55,9 @@ public interface AssessmentItemDao {
             "   INSERT INTO count (as_id,level,count) " +
             "   VALUES" +
             "   <foreach collection='list' item='item' separator=','>" +
-            "       (#{as_id},#{item.level},#{item.count})" +
+            "       <if test='item.level!=null &amp; item.count!=null'>" +
+            "           (#{as_id},#{item.level},#{item.count})" +
+            "       </if>" +
             "   </foreach>" +
             "</script>")
     Boolean InsertAssessmentItemCount(@Param("list")List<CountVo> list, @Param("as_id")String asId);

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AssessmentItemManagementCheckService {
@@ -43,6 +44,7 @@ public class AssessmentItemManagementCheckService {
 
 
         JSONArray jsonArray =dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("count");
+
 
         if(jsonArray==null){
             ExceptionUtil.throwRequestFailureException();
