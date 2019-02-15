@@ -23,6 +23,8 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 	UPDATE_EXAMINATION_ITEMS_WRONG("update_examination_items_wrong","更新绩效考核失败"),
 	UPDATE_WAGE_WRONG("update_wage_wrong","更新薪资失败"),
 	EXAMINATION_ITEM_IS_EMPTY("examination_item_is_empty", "考核项为空"),
+	ADD_GROUPS_WRONG("add_groups_wrong","添加权组失败"),
+	GROUP_EXIST("GROUP_EXIST","权组已存在"),
 
 	USER_NAME_IS_EMPTY("The parameters submitted are incorrect", "用户名不能为空");//此处添加枚举值
 

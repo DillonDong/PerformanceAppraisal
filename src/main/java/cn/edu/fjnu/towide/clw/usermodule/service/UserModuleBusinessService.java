@@ -1,5 +1,6 @@
 package cn.edu.fjnu.towide.clw.usermodule.service;
 
+import cn.edu.fjnu.towide.dao.GroupMembersDao;
 import cn.edu.fjnu.towide.dao.UserDetailDao;
 import cn.edu.fjnu.towide.entity.*;
 import cn.edu.fjnu.towide.util.CheckVariableUtil;
@@ -43,7 +44,8 @@ public class UserModuleBusinessService {
 	UserDetailDao userDetailDao;
 	@Autowired
 	AuthoritiesDao authoritiesDao;
-
+	@Autowired
+	GroupMembersDao groupMembersDao;
 	/**
 	 * @Description: 返回数据封装
 	 */
@@ -457,8 +459,20 @@ public class UserModuleBusinessService {
 	/**
 	 * @Description: 更新用户详细信息
 	 */
+	@Transactional
 	public void updateUserDetailedInfoRequestProcess() {
 		UserDetailInfoVo userDetailInfo = dataCenterService.getData("userDetailInfo");
+		boolean deleteUserFromGroupMembers=groupMembersDao.deleteUserFromGroupMembers(userDetailInfo.getUsername());
+		boolean addGroupMembers=groupMembersDao.addGroupMembers(userDetailInfo.getUsername(),userDetailInfo.getGroup());
+		if (!addGroupMembers) {
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.ADD_GROUPS_WRONG);
+			return;
+		}
+		int groupExist=groupMembersDao.isGroupExist(userDetailInfo.getUsername());
+		if (groupExist>=2) {
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.GROUP_EXIST);
+			return;
+		}
 		boolean updateUserDetailResult =userDetailDao.updateUserDetailedInfo(userDetailInfo);
 		if (!updateUserDetailResult) {
 			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.UPDATE_ERROR);

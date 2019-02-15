@@ -1,6 +1,7 @@
 package cn.edu.fjnu.towide.ws.deleteUser.service;
 
 import cn.edu.fjnu.towide.dao.UserDao;
+import cn.edu.fjnu.towide.entity.User;
 import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.CheckVariableUtil;
 import cn.edu.fjnu.towide.util.ExceptionUtil;
@@ -155,6 +156,12 @@ public class DeleteUserCheckService {
      */
     public void deleteUserRequestCheck() {
         String username = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("username");
+
+        User currentLoginUser = dataCenterService.getCurrentLoginUserFromDataLocal();
+        String currentUsername = currentLoginUser.getUsername();
+        if(currentUsername.equals(username)){
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.CAN_NOT_DELETE_MYSELF);
+        }
         if (CheckVariableUtil.stringVariableIsEmpty(username)) {
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.USER_NAME_IS_EMPTY);
         }
