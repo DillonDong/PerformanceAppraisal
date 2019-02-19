@@ -1,8 +1,8 @@
-package cn.edu.fjnu.towide.czx.AuthorityGroupManagement.enums;
+package cn.edu.fjnu.towide.xxx.authorityGroupManagement.enums;
 
 import cn.edu.fjnu.towide.enums.IReasonOfFailure;
 
-public enum ReasonOfFailure implements IReasonOfFailure{
+public enum ReasonOfFailure implements IReasonOfFailure {
 	USER_DOES_NOT_EXIST("User does not exist","用户不存在"),
 	FUNCTION_NO_ARE_INCORRECT("functionNoAreIncorrect","功能号不正确！"),
 	THE_PARAMETERS_SUBMITTED_ARE_INCORRECT("The parameters submitted are incorrect","提交的参数有误"), 

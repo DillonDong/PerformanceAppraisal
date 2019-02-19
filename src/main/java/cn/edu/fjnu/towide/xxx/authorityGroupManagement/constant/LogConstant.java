@@ -1,4 +1,4 @@
-package cn.edu.fjnu.towide.czx.AuthorityGroupManagement.constant;
+package cn.edu.fjnu.towide.xxx.authorityGroupManagement.constant;
 
 public interface LogConstant {
 	String OPERATION_RESULT_SUCCESS = "成功";

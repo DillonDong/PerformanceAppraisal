@@ -1,4 +1,4 @@
-package cn.edu.fjnu.towide.czx.AuthorityGroupManagement.constant;
+package cn.edu.fjnu.towide.xxx.authorityGroupManagement.constant;
 
 public interface AuthorityGroupManagementFunctionNoConstants {
 
@@ -7,6 +7,8 @@ public interface AuthorityGroupManagementFunctionNoConstants {
 	String DELETE_AUTHORITY_GROUP = "DeleteAuthorityGroup";  //删除权组
 	String MODIFY_AUTHORITY_GROUP = "ModifyAuthorityGroup";  //修改权组
 
+	String GET_AVAILABLE_GROUPS = "GetAvailableGroups";//获取添加人员可选的权限与组
+	String GET_AVAILABLE_PERMISSIONS = "GetAvailablePermissions";//获取添加人员可选的权限与组
 
 
 }
