@@ -19,6 +19,18 @@ public interface GroupMembersDao {
 	@Delete("DELETE FROM group_members WHERE username=#{username}")
 	boolean deleteUserFromGroupMembers(String username);
 
+	//查重
+	@Select("SELECT COUNT(1) FROM group_members WHERE username=#{username}")
+	int isGroupExist(@Param("username") String username);
+
+	/**
+	 * @Description: 添加用户
+	 */
+	@Insert("REPLACE INTO  group_members (username,group_id)"
+			+ "values "
+			+ "(#{userName},#{group_id}) ")
+	boolean addGroupMembers(@Param("userName")String userName,@Param("group_id") Long group_id);
+
 	/**  
 	 * @Description: 添加用户
 	 */  
