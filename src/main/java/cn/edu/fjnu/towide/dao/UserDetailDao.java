@@ -116,6 +116,14 @@ public interface UserDetailDao {
     )
     UserDetailInfoVo getUserDetailedInfoList(String username);
 
+    /**
+     * @Description: 获取用户权组id
+     */
+    @Select("SELECT group_id "
+            + "FROM group_members "
+            + "WHERE username=#{username}"
+    )
+    long getGroupId(String username);
 
     /**
      * @Description: 根据时间范围获得考核项柱形图数据

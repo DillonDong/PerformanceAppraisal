@@ -164,7 +164,10 @@ public class UserModuleBusinessService {
 		UserDetailInfoVo userDetailInfo=userDetailDao.getUserDetailedInfoList(username);
 		userDetailInfo.setIdPre("PerformanceAppraisal/" +userDetailInfo.getIdPre());
 		userDetailInfo.setIdAfter("PerformanceAppraisal/" +userDetailInfo.getIdAfter());
-		responseUtil("userDetailInfo",userDetailInfo);
+
+        long groupId=userDetailDao.getGroupId(username);
+        userDetailInfo.setGroup(groupId);
+        responseUtil("userDetailInfo",userDetailInfo);
 	}
 
 
