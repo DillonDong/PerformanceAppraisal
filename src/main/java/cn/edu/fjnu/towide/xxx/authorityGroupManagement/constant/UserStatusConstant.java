@@ -5,7 +5,7 @@
  * @author CaoZhengxi  
  * @date 2018年4月10日  
  */  
-package cn.edu.fjnu.towide.czx.AuthorityGroupManagement.constant;
+package cn.edu.fjnu.towide.xxx.authorityGroupManagement.constant;
 
 /**  
  * @ClassName: SequenceIdConstant  

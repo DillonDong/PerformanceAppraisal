@@ -1,4 +1,4 @@
-package cn.edu.fjnu.towide.czx.AuthorityGroupManagement.controller;
+package cn.edu.fjnu.towide.xxx.authorityGroupManagement.controller;
 
 import cn.edu.fjnu.towide.entity.ResponseData;
 import cn.edu.fjnu.towide.exception.RequestFailureException;
@@ -20,7 +20,7 @@ public class AuthorityGroupManagementController {
 	@Autowired
 	AuthorityGroupManagementAppVerNoDispatcher authorityGroupManagementAppVerNoDispatcher;
 	@Autowired
-	DataCenterService dataCenterService;
+    DataCenterService dataCenterService;
 
 //	@PreAuthorize("hasAuthority('AUTHORITYGROUPMANAGEMENT')")
 	@RequestMapping("/authorityGroupManagement")

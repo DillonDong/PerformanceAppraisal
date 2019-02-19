@@ -1,15 +1,14 @@
-package cn.edu.fjnu.towide.czx.AuthorityGroupManagement.service;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+package cn.edu.fjnu.towide.xxx.authorityGroupManagement.service;
 
 import cn.edu.fjnu.towide.service.DataCenterService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthorityGroupManagementService {
 
 	@Autowired
-	DataCenterService dataCenterService;
+    DataCenterService dataCenterService;
 	@Autowired
 	AuthorityGroupManagementCheckService authorityGroupManagementCheckService;
 	@Autowired
@@ -23,6 +22,8 @@ public class AuthorityGroupManagementService {
 		authorityGroupManagementBusinessService.getAuthorityGroupListRequestProcess();
 		
 	}
+
+
 
 	/**  
 	 *  添加权组
@@ -49,4 +50,13 @@ public class AuthorityGroupManagementService {
 	}
 
 
+	public void getAvailableGroupsRequestProcess() {
+		authorityGroupManagementCheckService.getAvailableGroupsRequestCheck();
+		authorityGroupManagementBusinessService.getAvailableGroupsRequestProcess();
+	}
+
+	public void getAvailablePermissionsRequestProcess() {
+		authorityGroupManagementCheckService.getAvailablePermissionsRequestCheck();
+		authorityGroupManagementBusinessService.getAvailablePermissionsRequestProcess();
+	}
 }

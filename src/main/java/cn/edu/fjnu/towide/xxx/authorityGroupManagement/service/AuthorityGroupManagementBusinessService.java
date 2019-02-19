@@ -1,20 +1,14 @@
-package cn.edu.fjnu.towide.czx.AuthorityGroupManagement.service;
+package cn.edu.fjnu.towide.xxx.authorityGroupManagement.service;
 
-import cn.edu.fjnu.towide.czx.AuthorityGroupManagement.constant.LogConstant;
-import cn.edu.fjnu.towide.czx.AuthorityGroupManagement.enums.ReasonOfFailure;
-import cn.edu.fjnu.towide.dao.AuthoritiesDao;
-import cn.edu.fjnu.towide.dao.GroupAuthoritiesDao;
-import cn.edu.fjnu.towide.dao.GroupDao;
-import cn.edu.fjnu.towide.dao.GroupMembersDao;
-import cn.edu.fjnu.towide.dao.UserDao;
+import cn.edu.fjnu.towide.dao.*;
+import cn.edu.fjnu.towide.entity.Authority;
 import cn.edu.fjnu.towide.entity.Group;
 import cn.edu.fjnu.towide.entity.GroupAuthorities;
 import cn.edu.fjnu.towide.entity.ResponseData;
-import cn.edu.fjnu.towide.entity.User;
 import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.ExceptionUtil;
-import cn.edu.fjnu.towide.util.RecordOperationLogUtil;
 import cn.edu.fjnu.towide.util.ResponseDataUtil;
+import cn.edu.fjnu.towide.xxx.authorityGroupManagement.enums.ReasonOfFailure;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -28,17 +22,17 @@ import java.util.List;
 public class AuthorityGroupManagementBusinessService {
 
 	@Autowired
-	DataCenterService dataCenterService;
+    DataCenterService dataCenterService;
 	@Autowired
-	UserDao userDao;
+    UserDao userDao;
 	@Autowired
-	AuthoritiesDao authoritiesDao;
+    AuthoritiesDao authoritiesDao;
 	@Autowired
-	GroupMembersDao groupMembersDao;
+    GroupMembersDao groupMembersDao;
 	@Autowired
-	GroupDao groupDao;
+    GroupDao groupDao;
 	@Autowired
-	GroupAuthoritiesDao groupAuthoritiesDao;
+    GroupAuthoritiesDao groupAuthoritiesDao;
 
 	/**
 	 *  获取权组列表
@@ -109,11 +103,7 @@ public class AuthorityGroupManagementBusinessService {
 			ExceptionUtil.throwRequestFailureException();
 		}
 		ResponseDataUtil.setHeadOfResponseDataWithSuccessInfo(responseData);
-		// 记录日志
-		User currentUser = dataCenterService.getCurrentLoginUserFromDataLocal();
-		String operationContent = String.format(LogConstant.ADD_AUTHORITY_GROUP_TEMPLATE, groupName);
-		RecordOperationLogUtil.recordAdminOperationLog(currentUser,null, operationContent, LogConstant.OPERATION_RESULT_SUCCESS,
-				null);
+
 	}
 
 	/**
@@ -129,12 +119,6 @@ public class AuthorityGroupManagementBusinessService {
 
 			boolean result1 = groupAuthoritiesDao.deleteGroupAuthoritiesByGroupId(groupId);
 			boolean result = groupDao.deleteGroupByGroupId(groupId);
-
-			// 记录日志
-			User currentUser = dataCenterService.getCurrentLoginUserFromDataLocal();
-			String operationContent = String.format(LogConstant.DELETE_AUTHORITY_GROUP_TEMPLATE, groupName);
-			RecordOperationLogUtil.recordAdminOperationLog(currentUser,null, operationContent,
-					LogConstant.OPERATION_RESULT_SUCCESS, null);
 
 			if (!(result && result1)) {
 				ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.THE_PARAMETERS_SUBMITTED_ARE_INCORRECT);
@@ -170,11 +154,32 @@ public class AuthorityGroupManagementBusinessService {
 			return;
 		}
 		ResponseDataUtil.setHeadOfResponseDataWithSuccessInfo(responseData);
-		// 记录日志
-		User currentUser = dataCenterService.getCurrentLoginUserFromDataLocal();
-		String operationContent = String.format(LogConstant.MODIFY_AUTHORITY_GROUP_TEMPLATE, groupName);
-		RecordOperationLogUtil.recordAdminOperationLog(currentUser,null, operationContent, LogConstant.OPERATION_RESULT_SUCCESS,
-				null);
+
+	}
+
+
+	/**
+	 * @Description:获取添加人员可选的权限与组
+	 */
+	public void getAvailableGroupsRequestProcess() {
+		List<Group> groups = groupDao.getGroupList();
+
+		JSONObject data = new JSONObject();
+		data.put("groups", groups);
+
+		ResponseData responseData = dataCenterService.getData("responseData");
+		ResponseDataUtil.setHeadOfResponseDataWithSuccessInfo(responseData);
+		responseData.setData(data);
+	}
+
+	public void getAvailablePermissionsRequestProcess() {
+        List<Authority> permissions = authoritiesDao.getPermissionsList();
+		JSONObject data = new JSONObject();
+		data.put("permissions", permissions);
+
+		ResponseData responseData = dataCenterService.getData("responseData");
+		ResponseDataUtil.setHeadOfResponseDataWithSuccessInfo(responseData);
+		responseData.setData(data);
 	}
 	
 	
