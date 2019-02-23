@@ -2,10 +2,7 @@ package cn.edu.fjnu.towide.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import cn.edu.fjnu.towide.entity.User;
@@ -26,9 +23,7 @@ public interface GroupMembersDao {
 	/**
 	 * @Description: 添加用户
 	 */
-	@Insert("REPLACE INTO  group_members (username,group_id)"
-			+ "values "
-			+ "(#{userName},#{group_id}) ")
+	@Update("UPDATE group_members SET group_id=#{group_id} WHERE username=#{userName}")
 	boolean addGroupMembers(@Param("userName")String userName,@Param("group_id") Long group_id);
 
 	/**  

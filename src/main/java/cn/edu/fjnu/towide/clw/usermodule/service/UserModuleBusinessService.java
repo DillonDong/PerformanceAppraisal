@@ -165,8 +165,10 @@ public class UserModuleBusinessService {
 		userDetailInfo.setIdPre("PerformanceAppraisal/" +userDetailInfo.getIdPre());
 		userDetailInfo.setIdAfter("PerformanceAppraisal/" +userDetailInfo.getIdAfter());
 
-        long groupId=userDetailDao.getGroupId(username);
-        userDetailInfo.setGroup(groupId);
+        Long groupId=userDetailDao.getGroupId(username);
+        if(groupId!=null){
+            userDetailInfo.setGroup(groupId);
+        }
         responseUtil("userDetailInfo",userDetailInfo);
 	}
 
@@ -465,7 +467,7 @@ public class UserModuleBusinessService {
 	@Transactional
 	public void updateUserDetailedInfoRequestProcess() {
 		UserDetailInfoVo userDetailInfo = dataCenterService.getData("userDetailInfo");
-		boolean deleteUserFromGroupMembers=groupMembersDao.deleteUserFromGroupMembers(userDetailInfo.getUsername());
+		//boolean deleteUserFromGroupMembers=groupMembersDao.deleteUserFromGroupMembers(userDetailInfo.getUsername());
 		boolean addGroupMembers=groupMembersDao.addGroupMembers(userDetailInfo.getUsername(),userDetailInfo.getGroup());
 		if (!addGroupMembers) {
 			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.ADD_GROUPS_WRONG);

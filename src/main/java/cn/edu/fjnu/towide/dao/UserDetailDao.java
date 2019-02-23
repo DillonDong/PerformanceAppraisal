@@ -123,7 +123,7 @@ public interface UserDetailDao {
             + "FROM group_members "
             + "WHERE username=#{username}"
     )
-    long getGroupId(String username);
+    Long getGroupId(String username);
 
     /**
      * @Description: 根据时间范围获得考核项柱形图数据

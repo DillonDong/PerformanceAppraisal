@@ -74,6 +74,9 @@ public interface UserDao {
 			+"VALUES (#{username})")
 	boolean addAuthorities(String username);
 
+	@Insert("REPLACE INTO group_members(username) "
+			+"VALUES (#{username})")
+	boolean addGroupMembers(String username);
 	/**
 	 *  前台添加用户信息user_details   如果已存在则更新
 	 */
