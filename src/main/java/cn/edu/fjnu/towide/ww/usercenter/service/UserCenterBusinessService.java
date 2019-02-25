@@ -267,8 +267,9 @@ public class UserCenterBusinessService {
         boolean addResult2 = userDao.addUserDetails(userDetails);
 
         boolean addResult3 = userDao.addAuthorities(username);
+        boolean addResult4 = userDao.addGroupMembers(username);
 
-        if (!addResult1 || !addResult2 || !addResult3) {
+        if (!addResult1 || !addResult2 || !addResult3|| !addResult4) {
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.USER_REGISTRATION_ERROR);
         }
 
