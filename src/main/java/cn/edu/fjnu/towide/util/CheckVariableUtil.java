@@ -24,7 +24,7 @@ public class CheckVariableUtil {
 	 */
 	public static boolean pageParamIsIllegal(Integer pageNum, Integer pageSize) {
 
-		return pageNum <= 0 || pageSize <= 0 || pageNum == null || pageSize == null;
+		return pageNum < 0 || pageSize < 0 || pageNum == null || pageSize == null;
 	}
 
 	/**
