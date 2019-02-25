@@ -6,6 +6,7 @@ import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.ResponseDataUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,8 @@ public class ParameterManagementController {
 	ParameterManagementAppVerNoDispatcher parameterManagementAppVerNoDispatcher;
 	@Autowired
     DataCenterService dataCenterService;
-	
+
+	@PreAuthorize("hasAuthority('parameter_manage')")
 	@RequestMapping("/parameter" )
 	public Object home(HttpServletRequest request,HttpServletResponse response){
 		JSONObject requestParamJson=(JSONObject) request.getAttribute("requestParamJson");

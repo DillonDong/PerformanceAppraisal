@@ -283,12 +283,19 @@ public class UserCenterBusinessService {
      */
     @Transactional
     public void forgetPasswordRequestProcess() {
+        String oldPassword = dataCenterService.getData("oldPassword");
 
         User currentLoginUser = dataCenterService.getCurrentLoginUserFromDataLocal();
         String username = currentLoginUser.getUsername();
+        //匹配前端传过来的密码和数据库的密码是否一样
+        String getPassword = userDao.getPasswordByUsername(username);
+        BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
+        if(!encoder.matches(oldPassword,getPassword)){
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.OLD_PASSWORD_ERROR);
+        }
+
         String password = dataCenterService.getData("password");
         String newPassword = CommonUtil.passwordEncodeByBCrypt(password);
-
         Date updateTime = userDao.getUpdateTimeFromUsername(username);
 
         boolean isUpdatePasswordSuccess = userDao.updatePasswordForUsers(newPassword, username);

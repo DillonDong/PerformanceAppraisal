@@ -15,6 +15,8 @@ public enum ReasonOfFailure implements IReasonOfFailure{
     PUSH_MAIL_ERROR("push_mail_error", "邮箱推送失败"),
 	MNS_MAIL_ERROR("mns_mail_error", "邮箱推送消息获取失败"),
 	PASSWORD_UPDATE_ERROR("password_update_error", "密码更新失败"),
+	OLD_PASSWORD_ERROR("old_password_error", "原密码错误"),
+
 	USER_REGISTRATION_ERROR("user_registration_error", "用户注册失败"),
 	USERNAME_UPDATE_ERROR("username_update_error", "用户名回填失败"),
 	QUEUE_IS_NOT_EXIST("Queue is not exist", "消息队列不存在"),

@@ -92,12 +92,14 @@ public class UserCenterCheckService {
      *  更新密码校验
      */
     public void forgetPasswordRequestCheck() {
+        String oldPassword = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("oldPassword");
 
         String password = dataCenterService.getParamValueFromParamOfRequestParamJsonByParamName("password");
 
-        if (CheckVariableUtil.stringVariableIsEmpty(password)) {
+        if (CheckVariableUtil.stringVariableIsEmpty(password) || CheckVariableUtil.stringVariableIsEmpty(oldPassword)) {
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.PASSWORD_IS_EMPTY);
         }
+        dataCenterService.setData("oldPassword", oldPassword);
 
         dataCenterService.setData("password", password);
 

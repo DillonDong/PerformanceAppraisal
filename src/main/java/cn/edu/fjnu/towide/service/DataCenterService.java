@@ -101,14 +101,14 @@ public class DataCenterService {
 	//从datalocal中拿，保证拿到自己的
 	public User getCurrentLoginUserFromDataLocal(){
 		//TODO
-		User test=new User();
-		test.setUsername("ws");
-		test.setRealName("王胜");
-		test.setIp("192.168.0.1");
-		return test;
-		// User currentLoginUser=this.getData("currentLoginUser");
-		// currentLoginUser.setIp(getIpAddress());
-		// return currentLoginUser;
+		// User test=new User();
+		// test.setUsername("ws");
+		// test.setRealName("王胜");
+		// test.setIp("192.168.0.1");
+		// return test;
+		User currentLoginUser=this.getData("currentLoginUser");
+		currentLoginUser.setIp(getIpAddress());
+		return currentLoginUser;
 	}
 
 	public String getIpAddress(){

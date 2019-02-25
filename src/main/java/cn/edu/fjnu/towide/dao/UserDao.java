@@ -58,6 +58,9 @@ public interface UserDao {
 	String getUsernameFromIdCardNum(String idCardNum);
 
 
+	//获取密码
+	@Select("SELECT password FROM users WHERE username=#{username}")
+	String getPasswordByUsername(String username);
 
 
 
