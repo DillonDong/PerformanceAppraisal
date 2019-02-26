@@ -4,7 +4,7 @@ public enum ResponseHeadEnum {
 
 	SUCCESS("2000","操作成功!","SUCCESS"),
 	FAILURE("5000","操作失败!","FAILURE"),
-	PASSWORD_OR_VERIFICATION_CODE_ERROR("5000","密码或验证码错误！","password or verification code error"),
+	PASSWORD_OR_VERIFICATION_CODE_ERROR("5000","密码错误！","password or verification code error"),
 	RESPONSEHEAD_NEED_LOGIN_ERROR("4000","未登录或登录失败!","Not logged in or failed to login!");
 //	RESPONSEHEAD_WRONG_JSON_FORMAT_ERROR("C0001","发送的数据不符合json规范!"),
 	//		RESPONSEHEAD_NOT_MEET_REQUIREMENTS_OF_INTERFACE("C0002","发送的数据符合json规范，但不符合接口要求！"),

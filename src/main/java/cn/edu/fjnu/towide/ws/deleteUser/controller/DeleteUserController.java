@@ -23,7 +23,7 @@ public class DeleteUserController {
 	@Autowired
 	DataCenterService dataCenterService;
 
-	@PreAuthorize("hasAuthority('DELETEUSER')")
+	@PreAuthorize("hasAuthority('DELETE_USER')")
 	@RequestMapping("/userDelete")
 	public Object home(HttpServletRequest request,HttpServletResponse response){
 		JSONObject requestParamJson=(JSONObject) request.getAttribute("requestParamJson");

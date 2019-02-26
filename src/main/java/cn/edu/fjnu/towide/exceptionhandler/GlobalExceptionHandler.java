@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 			case "AccessDeniedException":
 				
 				responseData=ResponseDataUtil.createResponseData(request, response);
-				ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.LOGIN_ERROR);
+				ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.NO_AUTHORITY);
 				
 				response.setCharacterEncoding("UTF-8");  
 				response.setContentType("application/json; charset=utf-8");

@@ -76,8 +76,8 @@ public class DataCenterService {
 		JSONObject data = new JSONObject();
 		this.dataLocal.set(data);
 
-		//User currentLoginUser=getCurrentLoginUser();
-		User currentLoginUser=new User();
+		User currentLoginUser=getCurrentLoginUser();
+		//User currentLoginUser=new User();
 		this.setData("currentLoginUser", currentLoginUser);
 		this.setData("requestParamJson", requestParamJson);
 		this.setData("responseData", responseData);

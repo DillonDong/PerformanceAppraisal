@@ -7,6 +7,7 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 	USER_DOES_NOT_EXIST_OR_PASSWORD_IS_INCORRECT("UserDoesNotExistOrPasswordIsIncorrect","用户不存在或密码错误"),
 	FAILED_TO_GET_VERIFICATION_CODE("FailedToGetVerificationCode","获取验证码失败！"),
 	LOGIN_ERROR("LoginError", "未登录或登录失败！"),
+	NO_AUTHORITY("no_authority", "无权访问！"),
 	DATA_NOT_MATCH("DataNotMatch", "数据与接口需求不匹配"),
 	THE_PARAMETERS_SUBMITTED_ARE_INCORRECT("The parameters submitted are incorrect","提交的参数有误"),
 	USER_EXIST("UserDoesNotExist","用户名已存在"),
