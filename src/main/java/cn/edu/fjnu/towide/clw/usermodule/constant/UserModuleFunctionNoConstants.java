@@ -20,4 +20,9 @@ public interface UserModuleFunctionNoConstants {
 	String GET_GRAPH_DATA = "GetGraphData";  //根据时间范围获得考核项柱形图数据
 
 
+
+	String GET_AVAILABLE_GROUPS = "GetAvailableGroups";//获取添加人员可选的权限与组
+	String GET_ASSESSMENT_ITEM_REQUEST = "GetAssessmentItemRequest";
+	String GET_DEPARTMENT_LIST =  "GetDepartmentList";
+
 }
