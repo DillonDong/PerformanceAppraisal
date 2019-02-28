@@ -43,6 +43,42 @@ public class ParameterManagementCheckService {
 		Double ccqjzzRight = parameter.getCcqjzzRight();
 		Double ccqjzyLeft = parameter.getCcqjzyLeft();
 		Double ccqjzyRight = parameter.getCcqjzyRight();
+		Double jxblLeft = parameter.getJxblLeft();
+		if(parameter.getMeritsPay()<0){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.MERITSPAY_OVER_0);
+		}
+		if(parameter.getMinimumTurnover()<0){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.MINIMUMTURNOVER_OVER_0);
+		}
+		if(parameter.getCcqjLeft()<0){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.CCFSQJL_OVER_0);
+		}
+		if(parameter.getCcqjMiddle()<0){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.COUNT_OVER_0);
+		}
+		if(parameter.getCcqjRight()>100){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.CCFSQJR_OVER_0);
+		}
+		if(ccqjzzLeft<0){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.COUNT_OVER_0);
+		}
+		if(ccqjzyLeft<0){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.COUNT_OVER_0);
+		}
+		if(jxqjLeft<60){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.JXKHLEFT_SHOULD_OVER_60);
+		}
+		if(jxqjLeft<60){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.JXKHLEFT_SHOULD_OVER_60);
+		}
+		if (jxqjRight >100){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.JXQJRIGHT_SHOULD_OVER_60);
+		}
+
+
+		if (jxblLeft>100||jxblLeft<0){
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.JXQJRIGHT_SHOULD_OVER_60);
+		}
 
 		if (jxqjLeft>=jxqjRight || ccqjLeft>=ccqjMiddle || ccqjLeft >=ccqjRight || ccqjMiddle>=ccqjRight || ccqjzzLeft>=ccqjzzRight || ccqjzyLeft>=ccqjzyRight){
 			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.THE_PARAMETERS_DO_NOT_CONFORM_TO_SPECIFICATIONS);

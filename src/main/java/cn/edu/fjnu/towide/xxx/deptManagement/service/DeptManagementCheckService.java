@@ -55,7 +55,7 @@ public class DeptManagementCheckService {
 
         assessmentItems.stream().forEach(
                 assessmentItemVo -> {
-                    if (assessmentItemVo.getWeight()==null||assessmentItemVo.getWeight()<=0){
+                    if (assessmentItemVo.getWeight()==null||assessmentItemVo.getWeight()<=0.0f){
                         ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.WEIGHT_SHOULD_OVER_ZERO);
                     }
                 }
