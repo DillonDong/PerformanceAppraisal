@@ -71,18 +71,17 @@ public class UserModuleFunctionNoDispatcher {
                 break;
 
 
-            case AssessmentItemManagementFunctionNoConstants.GET_ASSESSMENT_ITEM_REQUEST:
-                assessmentItemManagementService.getAssessmentItemRequest();
+            case UserModuleFunctionNoConstants.GET_ASSESSMENT_ITEM_REQUEST:
+                userModuleService.getAssessmentItemRequest();
                 break;
-            // 获取添加人员可选的权限与组
-            case AuthorityGroupManagementFunctionNoConstants.GET_AVAILABLE_GROUPS:
-                authorityGroupManagementService.getAvailableGroupsRequestProcess();
+            case UserModuleFunctionNoConstants.GET_AVAILABLE_GROUPS:
+                userModuleService.getAvailableGroupsRequestProcess();
                 break;
-            case  DeptManagementFunctionNoConstants.GET_DEPARTMENT_LIST:
-                deptManagementService.getDepartmentListRequest();
+            case  UserModuleFunctionNoConstants.GET_DEPARTMENT_LIST:
+                userModuleService.getDepartmentListRequest();
                 break;
-            case AuthorityGroupManagementFunctionNoConstants.GET_AUTHORITY_GROUP_LIST:
-                authorityGroupManagementService.getAuthorityGroupListRequestProcess();
+            case UserModuleFunctionNoConstants.GET_AUTHORITY_GROUP_LIST:
+                userModuleService.getAuthorityGroupListRequestProcess();
                 break;
             default:
                 ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.FUNCTION_NO_ARE_INCORRECT);

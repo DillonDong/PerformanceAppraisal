@@ -1,7 +1,6 @@
 package cn.edu.fjnu.towide.clw.usermodule.service;
 
-import cn.edu.fjnu.towide.dao.GroupMembersDao;
-import cn.edu.fjnu.towide.dao.UserDetailDao;
+import cn.edu.fjnu.towide.dao.*;
 import cn.edu.fjnu.towide.entity.*;
 import cn.edu.fjnu.towide.util.CheckVariableUtil;
 import cn.edu.fjnu.towide.util.IdGenerator;
@@ -19,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.edu.fjnu.towide.clw.usermodule.enums.ReasonOfFailure;
-import cn.edu.fjnu.towide.dao.AuthoritiesDao;
-import cn.edu.fjnu.towide.dao.UserDao;
 import cn.edu.fjnu.towide.service.DataCenterService;
 import cn.edu.fjnu.towide.util.ExceptionUtil;
 import cn.edu.fjnu.towide.util.ResponseDataUtil;
@@ -35,7 +32,14 @@ import static cn.edu.fjnu.towide.constant.FilePathNameTemplate.uploadFileLocalPa
 
 @Service
 public class UserModuleBusinessService {
-	
+
+	@Autowired
+	GroupAuthoritiesDao groupAuthoritiesDao;
+
+	@Autowired
+	GroupDao groupDao;
+	@Autowired
+	DepartmentDao departmentDao;
 	@Autowired
 	DataCenterService dataCenterService;
 	@Autowired
@@ -46,6 +50,9 @@ public class UserModuleBusinessService {
 	AuthoritiesDao authoritiesDao;
 	@Autowired
 	GroupMembersDao groupMembersDao;
+
+	@Autowired
+	AssessmentItemDao assessmentItemDao;
 	/**
 	 * @Description: 返回数据封装
 	 */
@@ -511,5 +518,68 @@ public class UserModuleBusinessService {
 		List<GraphVo> graphVoList=userDetailDao.getGraphData(startTime, endTime, username, examinationItem);
 
 		responseUtil("graphVoList",graphVoList);
+	}
+
+    public void getAssessmentItemRequestProcess() {
+		List<AssessmentItem> assessmentItemList = assessmentItemDao.getAssessmentItemList(null);
+
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("assessmentItemList",assessmentItemList);
+		setReturnDataOfSuccess(jsonObject);
+
+	}
+
+	/**
+	 * 设置成功返回信息
+	 */
+	private void setReturnDataOfSuccess() {
+
+		ResponseData responseData = dataCenterService.getResponseDataFromDataLocal();
+		ResponseDataUtil.setHeadOfResponseDataWithSuccessInfo(responseData);
+	}
+
+	/**
+	 * 设置成功返回信息
+	 */
+	private void setReturnDataOfSuccess(JSONObject jsonObject) {
+
+		ResponseData responseData = dataCenterService.getResponseDataFromDataLocal();
+		responseData.setData(jsonObject);
+		ResponseDataUtil.setHeadOfResponseDataWithSuccessInfo(responseData);
+	}
+
+	public void getAvailableGroupsRequestProcess() {
+		List<Group> groups = groupDao.getGroupList();
+
+		JSONObject data = new JSONObject();
+		data.put("groups", groups);
+
+		ResponseData responseData = dataCenterService.getData("responseData");
+		ResponseDataUtil.setHeadOfResponseDataWithSuccessInfo(responseData);
+		responseData.setData(data);
+	}
+
+	public void getDepartmentListRequestProcess() {
+		List<Department> departmentList= departmentDao.GetDepartmentList(null);
+
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("departmentList",departmentList);
+		setReturnDataOfSuccess(jsonObject);
+	}
+
+	public void getAuthorityGroupListRequestProcess() {
+		List<Group> groups = groupDao.getGroupList();
+
+		for (Group group : groups) {
+			List<GroupAuthorities> groupAuthorities = groupAuthoritiesDao.getAuthoritiesByGroupId(group.getId());
+			group.setGroupAuthorities(groupAuthorities);
+		}
+		JSONObject data = new JSONObject();
+		data.put("groups", groups);
+
+		ResponseData responseData=dataCenterService.getResponseDataFromDataLocal();
+
+		ResponseDataUtil.setHeadOfResponseDataWithSuccessInfo(responseData);
+		responseData.setData(data);
 	}
 }

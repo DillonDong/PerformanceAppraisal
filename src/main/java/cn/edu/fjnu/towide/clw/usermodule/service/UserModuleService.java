@@ -112,6 +112,19 @@ public class UserModuleService {
 	}
 
 
+    public void getAssessmentItemRequest() {
+		userModuleBusinessService.getAssessmentItemRequestProcess();
+	}
 
+	public void getAvailableGroupsRequestProcess() {
+		userModuleBusinessService.getAvailableGroupsRequestProcess();
+	}
 
+	public void getDepartmentListRequest() {
+		userModuleBusinessService.getDepartmentListRequestProcess();
+	}
+
+	public void getAuthorityGroupListRequestProcess() {
+		userModuleBusinessService.getAuthorityGroupListRequestProcess();
+	}
 }
