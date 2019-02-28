@@ -91,6 +91,14 @@ public interface UserDetailDao {
     @Delete("DELETE FROM user_assessment WHERE user_id=#{username} and time=#{time}")
     boolean deleteUserExaminationItems(@Param("username")String username, @Param("time")String time);
 
+    /**
+     * @Description: 获取
+     */
+    @Select("SELECT examine "
+            + "FROM user_wages "
+            + "WHERE user_id=#{userName} and time=#{time}"
+    )
+    Integer isExamineExaminationItems(@Param("userName")String userName , @Param("time")String time);
 
     /**
      * @Description: 获取用户信息列表

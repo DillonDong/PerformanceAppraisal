@@ -132,7 +132,12 @@ public class UserModuleBusinessService {
     public void deleteExaminationItemsRequestProcess() {
         String time = dataCenterService.getData("time");
         String username = dataCenterService.getData("username");
-        boolean deleteUserSalaryInfoCheck=userDetailDao.deleteUserSalaryInfo(username,time);
+		int isExamine =userDetailDao.isExamineExaminationItems(username,time);
+		if (isExamine==1) {
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.EXAMINE_IS_WRONG);
+			return;
+		}
+		boolean deleteUserSalaryInfoCheck=userDetailDao.deleteUserSalaryInfo(username,time);
         if (!deleteUserSalaryInfoCheck) {
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.DELETE_IS_WRONG);
             return;

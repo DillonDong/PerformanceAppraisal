@@ -13,6 +13,8 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 	OPENID_IS_WRONG("The parameters submitted are incorrect", "OpenId错误"),
 	TIME_IS_EMPTY("The parameters submitted are incorrect", "时间不能为空"),
 	DELETE_IS_WRONG("The parameters submitted are incorrect", "删除失败"),
+	EXAMINE_IS_WRONG("The parameters submitted are incorrect", "已审核不能删除"),
+
 	PAGEINFO_ERROR("PageInfoError", "分页信息错误"),//此处添加枚举值
 	UPDATE_ERROR("update_error","更新对象出错"),
 	EXAMINATION_ITEMS_EMPTY("examination_items_empty","考核项为空"),
