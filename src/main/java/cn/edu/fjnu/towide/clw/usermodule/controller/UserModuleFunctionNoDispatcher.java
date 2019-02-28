@@ -31,6 +31,7 @@ public class UserModuleFunctionNoDispatcher {
     @Autowired
     DeptManagementService deptManagementService;
 
+
     static Logger logger = LoggerFactory.getLogger(UserModuleFunctionNoDispatcher.class);
 
     public void dispatchByFunctionNo(String functionNo, ResponseData responseData) {
@@ -79,6 +80,9 @@ public class UserModuleFunctionNoDispatcher {
                 break;
             case  DeptManagementFunctionNoConstants.GET_DEPARTMENT_LIST:
                 deptManagementService.getDepartmentListRequest();
+                break;
+            case AuthorityGroupManagementFunctionNoConstants.GET_AUTHORITY_GROUP_LIST:
+                authorityGroupManagementService.getAuthorityGroupListRequestProcess();
                 break;
             default:
                 ResponseDataUtil.setResponseDataWithFailureInfo(responseData, ReasonOfFailure.FUNCTION_NO_ARE_INCORRECT);
