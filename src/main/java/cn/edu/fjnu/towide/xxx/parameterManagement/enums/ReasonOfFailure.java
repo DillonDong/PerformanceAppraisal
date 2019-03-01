@@ -11,6 +11,7 @@ public enum ReasonOfFailure implements IReasonOfFailure {
 	CCFSQJL_OVER_0("CCFSQJL_OVER_0","抽成分数左区间应该大于0"),
 	COUNT_OVER_0("COUNT_OVER_0","数值应该大于0"),
 	CCFSQJR_OVER_0("CCFSQJR_OVER_100","抽成分数右区间应该小于等于100"),
+    JXQJBLL_SHOULD("JXQJRIGHT_SHOULD_OVER_60","绩效正比左比例应该在0-100之间"),
 
 	JXQJRIGHT_SHOULD_OVER_60("JXQJRIGHT_SHOULD_OVER_60","绩效考核右区间应该小于100分"),
 	JXBLLEFT_ERROR("JXBLLEFT_IS_ERROR","绩效比例左区间应该在0-100之间"),

@@ -68,16 +68,14 @@ public class ParameterManagementCheckService {
 		if(jxqjLeft<60){
 			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.JXKHLEFT_SHOULD_OVER_60);
 		}
-		if(jxqjLeft<60){
-			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.JXKHLEFT_SHOULD_OVER_60);
-		}
+
 		if (jxqjRight >100){
 			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.JXQJRIGHT_SHOULD_OVER_60);
 		}
 
 
 		if (jxblLeft>100||jxblLeft<0){
-			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.JXQJRIGHT_SHOULD_OVER_60);
+			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.JXQJBLL_SHOULD);
 		}
 
 		if (jxqjLeft>=jxqjRight || ccqjLeft>=ccqjMiddle || ccqjLeft >=ccqjRight || ccqjMiddle>=ccqjRight || ccqjzzLeft>=ccqjzzRight || ccqjzyLeft>=ccqjzyRight){
