@@ -201,8 +201,16 @@ public class UserModuleBusinessService {
 		//数组第一个为时间
 		String time=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(0))).getString("value");
 		//数组第二个为营业额
-		Double turnover=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(1))).getDouble("value");
-		boolean istimeExist=userDao.isTimeExist(username,time);
+        Double turnover=null;
+        try {
+            turnover=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(1))).getDouble("value");
+        }catch (Exception e){
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.COUNT_ERR);
+        }
+        if(turnover==null){
+            ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.TURNOVER_ERR);
+        }
+        boolean istimeExist=userDao.isTimeExist(username,time);
 		if(istimeExist){
 			ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.EXAMINATION_ITEMS_IS_EXIST);
 			return;
@@ -211,7 +219,15 @@ public class UserModuleBusinessService {
 		Map<String,Double> countMap=new HashMap<>();
 		for(int i=2;i<examinationItems.size();i++){
 			String examinationItemId=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getString("examinationItemId");
-			Double value=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getDouble("value");
+			Double value=null;
+            try {
+                value=JSONObject.parseObject(JSONObject.toJSONString(examinationItems.get(i))).getDouble("value");
+            }catch (Exception e){
+                ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.COUNT_ERR);
+            }
+            if(value==null){
+                ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.EXAMINATION_ITEM_ERR);
+            }
 			CountVo bigger=userDetailDao.getBiggerCount(examinationItemId,value);
 			CountVo smaller=userDetailDao.getSmallerCount(examinationItemId,value);
 

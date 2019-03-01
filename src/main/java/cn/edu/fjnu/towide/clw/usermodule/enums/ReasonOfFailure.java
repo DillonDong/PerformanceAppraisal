@@ -22,7 +22,11 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 	ADD_WAGE_WRONG("add_wage_wrong","添加薪资失败"),
 	DELETE_ERROR("update_error","删除用户失败"),
 	EXAMINATION_ITEMS_IS_EXIST("examination_items_is_exist","该月绩效考核已存在"),
-	UPDATE_EXAMINATION_ITEMS_WRONG("update_examination_items_wrong","更新绩效考核失败"),
+    COUNT_ERR("COUNT_ERR","请输入数字类型"),
+    TURNOVER_ERR("TURNOVER_ERR","营业额不能为空"),
+    EXAMINATION_ITEM_ERR("EXAMINATION_ITEM_ERR","考核项数值不能为空"),
+
+    UPDATE_EXAMINATION_ITEMS_WRONG("update_examination_items_wrong","更新绩效考核失败"),
 	UPDATE_WAGE_WRONG("update_wage_wrong","更新薪资失败"),
 	EXAMINATION_ITEM_IS_EMPTY("examination_item_is_empty", "考核项为空"),
 	ADD_GROUPS_WRONG("add_groups_wrong","添加权组失败"),
