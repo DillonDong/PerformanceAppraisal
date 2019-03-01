@@ -10,6 +10,7 @@ public enum ReasonOfFailure implements IReasonOfFailure{
 	THIS_ASSESSMENT_ITEM_NO_COUNT("this_assessment_item_no_count","考核项未被添加等级分数"),
 	ASSESSMENT_ITEM_IS_NOT_DELETE("assessment_item_is_not_delete","待删除的考核项中存在正在使用的考核项"),
 	ASSESSMENT_ITEM_SHOULD_HAS_ONE_LEVEL("assessment_item_should_has_one_level","考核项一个等级不应该对应多种分数"),
+	HAHAH("assessment_item_should_has_one_level","每一行的等级和对应分数不能为空并且必须为数字"),
 	INSERT_IS_FAILURE("insert_is_failure", "插入失败");//此处添加枚举值
 
 	private String en_msg;

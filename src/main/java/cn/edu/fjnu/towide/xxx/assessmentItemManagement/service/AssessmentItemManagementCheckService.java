@@ -50,6 +50,15 @@ public class AssessmentItemManagementCheckService {
             ExceptionUtil.throwRequestFailureException();
         }
         List<CountVo> count = jsonArray.toJavaList(CountVo.class);
+        count.stream().forEach(
+                countVo -> {
+                    if (countVo.getLevel()==null||countVo.getCount()==null){
+                        ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.HAHAH);
+                    }
+                }
+
+        );
+        System.out.println(count);
 
         if (count.size()==0){
             ExceptionUtil.setFailureMsgAndThrow(ReasonOfFailure.THIS_ASSESSMENT_ITEM_NO_COUNT);
